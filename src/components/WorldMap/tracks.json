@@ -1,0 +1,70 @@
+{
+  "tracks": [
+    {
+      "name": "Adelaide",
+      "lng": 138.599503,
+      "lat": -34.92123,
+      "model": ""
+    },
+    {
+      "name": "Melbourne",
+      "lng": 144.586,
+      "lat": -37.5059,
+      "model": "models/albert_park.stl"
+    },
+    {
+      "name": "Shanghai",
+      "lng": 121.1311,
+      "lat": 31.202,
+      "model": ""
+    },
+    {
+      "name": "Suzuka",
+      "lng": 136.5417,
+      "lat": 34.8425,
+      "model": ""
+    },
+    {
+      "name": "Bahrain",
+      "lng": 50.3038,
+      "lat": 26.157,
+      "model": ""
+    },
+    {
+      "name": "Jeddah",
+      "lng": 39.0616,
+      "lat": 21.3755,
+      "model": ""
+    },
+    {
+      "name": "Miami",
+      "lng": -80.238889,
+      "lat": 25.958056,
+      "model": ""
+    },
+    {
+      "name": "Imola",
+      "lng": 11.4248,
+      "lat": 44.2028,
+      "model": ""
+    },
+    {
+      "name": "Monaco",
+      "lng": 7.4217,
+      "lat": 43.7342,
+      "model": ""
+    },
+    {
+      "name": "Barcelona",
+      "lng": -2.2579,
+      "lat": 41.5697,
+      "model": ""
+    },
+    {
+      "name": "Canada",
+      "lng": -73.5226,
+      "lat": 45.5014,
+      "model": ""
+    }
+  ]
+}
