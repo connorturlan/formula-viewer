@@ -1,0 +1,36 @@
+.App {
+  &Layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100vh;
+    width: 100vw;
+
+    background-color: black;
+  }
+}
+
+.Container {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: 100vw;
+
+  pointer-events: none;
+}
+
+.Sidebar {
+  height: 100vh;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  padding: 0 24px;
+
+  pointer-events: all;
+  overflow-y: auto;
+}

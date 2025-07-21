@@ -1,0 +1,180 @@
+{
+  "tracks": [
+    {
+      "name": "Adelaide",
+      "lng": 138.599503,
+      "lat": -34.92123,
+      "model": ""
+    },
+    {
+      "name": "Melbourne",
+      "lng": 144.586,
+      "lat": -37.5059,
+      "model": "models/albert_park.stl"
+    },
+    {
+      "name": "Shanghai",
+      "lng": 121.1311,
+      "lat": 31.202,
+      "model": "models/shanghai.stl"
+    },
+    {
+      "name": "Suzuka",
+      "lng": 136.5417,
+      "lat": 34.8425,
+      "model": ""
+    },
+    {
+      "name": "Bahrain",
+      "lng": 50.3038,
+      "lat": 26.157,
+      "model": ""
+    },
+    {
+      "name": "Jeddah",
+      "lng": 39.0616,
+      "lat": 21.3755,
+      "model": ""
+    },
+    {
+      "name": "Miami",
+      "lng": -80.238889,
+      "lat": 25.958056,
+      "model": ""
+    },
+    {
+      "name": "Imola",
+      "lng": 11.4248,
+      "lat": 44.2028,
+      "model": ""
+    },
+    {
+      "name": "Monaco",
+      "lng": 7.4217,
+      "lat": 43.7342,
+      "model": ""
+    },
+    {
+      "name": "Barcelona",
+      "lng": -2.2579,
+      "lat": 41.5697,
+      "model": ""
+    },
+    {
+      "name": "Canada",
+      "lng": -73.5226,
+      "lat": 45.5014,
+      "model": ""
+    },
+    {
+      "name": "Red Bull Ring",
+      "lng": 14.7651,
+      "lat": 47.2197,
+      "model": ""
+    },
+    {
+      "name": "Silverstone",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
+      "lng": -1.02303,
+      "lat": 52.0681,
+      "model": ""
+    },
+    {
+      "name": "Spa",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
+      "lng": 5.971003,
+      "lat": 50.4457,
+      "model": ""
+    },
+    {
+      "name": "Hungary",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
+      "lng": 19.24743,
+      "lat": 47.5798,
+      "model": ""
+    },
+    {
+      "name": "Zandvoort",
+      "trackName": "Circuit Zandvoort",
+      "gpName": "Dutch GP",
+      "lng": 4.534503,
+      "lat": 52.3842,
+      "model": ""
+    },
+    {
+      "name": "Monza",
+      "trackName": "Autodromo Nazionale Monza",
+      "gpName": "Italian GP",
+      "lng": 9.281503,
+      "lat": 45.6174,
+      "model": ""
+    },
+    {
+      "name": "Baku",
+      "trackName": "Baku City Circuit",
+      "gpName": "Azerbaijan GP",
+      "lng": 49.85323,
+      "lat": 40.3729,
+      "model": ""
+    },
+    {
+      "name": "Singapore",
+      "trackName": "Marina Bay Street Circuit",
+      "gpName": "Singaporian GP",
+      "lng": 103.86663,
+      "lat": 1.2878,
+      "model": ""
+    },
+    {
+      "name": "Americas",
+      "trackName": "Circuit of the Americas",
+      "gpName": "US GP",
+      "lng": -97.6405,
+      "lat": 30.1327,
+      "model": ""
+    },
+    {
+      "name": "Mexico",
+      "trackName": "Autódromo Hermanos Rodríguez",
+      "gpName": "Mexican GP",
+      "lng": -99.0926,
+      "lat": 19.4055,
+      "model": ""
+    },
+    {
+      "name": "Brazil",
+      "trackName": "Autódromo José Carlos Pace",
+      "gpName": "Brazilian GP",
+      "lng": -46.7008,
+      "lat": -23.7038,
+      "model": ""
+    },
+    {
+      "name": "Las Vegas",
+      "trackName": "Las Vegas Street Circuit",
+      "gpName": "Las Vegas GP",
+      "lng": -115.0944,
+      "lat": 36.0636,
+      "model": ""
+    },
+    {
+      "name": "Qatar",
+      "trackName": "Losail Circuit",
+      "gpName": "Qatar GP",
+      "lng": 51.45053,
+      "lat": 25.4885,
+      "model": ""
+    },
+    {
+      "name": "Abu Dhabi",
+      "trackName": "Yas Marina Circuit",
+      "gpName": "Abu Dhabi GP",
+      "lng": 54.60573,
+      "lat": 24.4697,
+      "model": ""
+    }
+  ]
+}

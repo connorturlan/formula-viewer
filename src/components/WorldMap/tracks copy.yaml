@@ -65,128 +65,124 @@
         "lat": 73.5226,
         "model": "",
       },
-      # 47.2197° N, 14.7651° E
       {
         "name": "Red Bull Ring",
-        "lng": 14.7651,
-        "lat": 47.2197,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 52.0681, -1.0230
+      # 52.0681° N, 1.0230° W
       {
         "name": "Silverstone",
-        "trackName": "Hungaroring",
-        "gpName": "Hungarian GP",
-        "lng": -1.02303,
-        "lat": 52.0681,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 50.4457, 5.9710
+      # 50.4457° N, 5.9710° E
       {
         "name": "Spa",
-        "trackName": "Hungaroring",
-        "gpName": "Hungarian GP",
-        "lng": 5.971003,
-        "lat": 50.4457,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 47.5798, 19.2474
+      # 47.5798° N, 19.2474° E
       {
         "name": "Hungary",
         "trackName": "Hungaroring",
         "gpName": "Hungarian GP",
-        "lng": 19.24743,
-        "lat": 47.5798,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 52.3842, 4.5345
+      # 52.3842° N, 4.5345° E
       {
         "name": "Zandvoort",
         "trackName": "Circuit Zandvoort",
         "gpName": "Dutch GP",
-        "lng": 4.534503,
-        "lat": 52.3842,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 45.6174, 9.2815
+      # 45.6174° N, 9.2815° E
       {
         "name": "Monza",
         "trackName": "Autodromo Nazionale Monza",
         "gpName": "Italian GP",
-        "lng": 9.281503,
-        "lat": 45.6174,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 40.3729, 49.8532
+      # 40.3729° N, 49.8532° E
       {
         "name": "Baku",
         "trackName": "Baku City Circuit",
         "gpName": "Azerbaijan GP",
-        "lng": 49.85323,
-        "lat": 40.3729,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 1.2878, 103.8666
+      # 1.2878° N, 103.8666° E
       {
         "name": "Singapore",
         "trackName": "Marina Bay Street Circuit",
         "gpName": "Singaporian GP",
-        "lng": 103.86663,
-        "lat": 1.2878,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 30.1327, -97.6405
+      # 30.1327° N, 97.6405° W
       {
         "name": "Americas",
         "trackName": "Circuit of the Americas",
         "gpName": "US GP",
-        "lng": -97.6405,
-        "lat": 30.1327,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 19.4055, -99.0926
+      # 19.4055° N, 99.0926° W
       {
         "name": "Mexico",
         "trackName": "Autódromo Hermanos Rodríguez",
         "gpName": "Mexican GP",
-        "lng": -99.0926,
-        "lat": 19.4055,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # -23.7038, -46.7008
+      # 23.7038° S, 46.7008° W
       {
         "name": "Brazil",
         "trackName": "Autódromo José Carlos Pace",
         "gpName": "Brazilian GP",
-        "lng": -46.7008,
-        "lat": -23.7038,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 36.0636, -115.0944
+      # 23.7038° S, 46.7008° W
+      # 36.0636 N 115.0944 W
       {
         "name": "Las Vegas",
         "trackName": "Las Vegas Street Circuit",
         "gpName": "Las Vegas GP",
-        "lng": -115.0944,
-        "lat": 36.0636,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 25.4885, 51.4505
+      # 25.4885° N, 51.4505° E
       {
         "name": "Qatar",
         "trackName": "Losail Circuit",
         "gpName": "Qatar GP",
-        "lng": 51.45053,
-        "lat": 25.4885,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
-      # 24.4697, 54.6057
+      # 24.4697° N, 54.6057° E
       {
         "name": "Abu Dhabi",
         "trackName": "Yas Marina Circuit",
         "gpName": "Abu Dhabi GP",
-        "lng": 54.60573,
-        "lat": 24.4697,
+        "lng": 138.599503,
+        "lat": -34.92123,
         "model": "",
       },
     ] }
