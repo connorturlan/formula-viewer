@@ -33,4 +33,10 @@
 
   pointer-events: all;
   overflow-y: auto;
+
+  &Label {
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+  }
 }

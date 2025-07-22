@@ -21,6 +21,7 @@ export const TrackList = () => {
             return (
               <h3
                 key={track.name}
+                className={styles.SidebarLabel}
                 onClick={() => {
                   console.log(`selected: ${track.name}`);
                   selectTrack("onTrackSelect", {

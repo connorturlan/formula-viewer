@@ -2,75 +2,111 @@
   "tracks": [
     {
       "name": "Adelaide",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 138.599503,
       "lat": -34.92123,
-      "model": ""
+      "model": "models/albert_park.stl",
+      "image": ""
     },
     {
       "name": "Melbourne",
-      "lng": 144.586,
-      "lat": -37.5059,
-      "model": "models/albert_park.stl"
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
+      "lng": 144.97,
+      "lat": -37.8503,
+      "model": "models/sectors/melbourne.stl",
+      "image": "svg/australia.svg"
     },
     {
       "name": "Shanghai",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 121.1311,
       "lat": 31.202,
-      "model": "models/shanghai.stl"
+      "model": "models/shanghai-international-circuit-shanghai-china-5xs.stl",
+      "image": "svg/china.svg"
     },
     {
       "name": "Suzuka",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 136.5417,
       "lat": 34.8425,
-      "model": ""
+      "model": "models/suzuka-circuit-suzuka-japan-5xsup.stl",
+      "image": "svg/japan.svg"
     },
     {
       "name": "Bahrain",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 50.3038,
       "lat": 26.157,
-      "model": ""
+      "model": "models/bahrain-international-circuit-sakhir-bahrain-5xsu.stl",
+      "image": "svg/hungary.svg"
     },
     {
       "name": "Jeddah",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 39.0616,
       "lat": 21.3755,
-      "model": ""
+      "model": "",
+      "image": "svg/saudi_arabia.svg"
     },
     {
       "name": "Miami",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": -80.238889,
       "lat": 25.958056,
-      "model": ""
+      "model": "",
+      "image": "svg/miami.svg"
     },
     {
       "name": "Imola",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 11.4248,
       "lat": 44.2028,
-      "model": ""
+      "model": "",
+      "image": "svg/imola.svg"
     },
     {
       "name": "Monaco",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 7.4217,
       "lat": 43.7342,
-      "model": ""
+      "model": "",
+      "image": "svg/monaco.svg"
     },
     {
       "name": "Barcelona",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": -2.2579,
       "lat": 41.5697,
-      "model": ""
+      "model": "models/circuit-de-barcelona-catalunya-montmelo-spain-5xs.stl",
+      "image": "svg/spain.svg"
     },
     {
       "name": "Canada",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": -73.5226,
       "lat": 45.5014,
-      "model": ""
+      "model": "models/circuit-gilles-villeneuve-montreal-canada-5xsup.stl",
+      "image": "svg/canada.svg"
     },
     {
       "name": "Red Bull Ring",
+      "trackName": "Hungaroring",
+      "gpName": "Hungarian GP",
       "lng": 14.7651,
       "lat": 47.2197,
-      "model": ""
+      "model": "models/red-bull-ring-spielberg-bei-knittelfeld-austria-5.stl",
+      "image": "svg/austria.svg"
     },
     {
       "name": "Silverstone",
@@ -78,7 +114,8 @@
       "gpName": "Hungarian GP",
       "lng": -1.02303,
       "lat": 52.0681,
-      "model": ""
+      "model": "models/silverstone-circuit-silverstone-united-kingdom-5x.stl",
+      "image": "svg/silverstone.svg"
     },
     {
       "name": "Spa",
@@ -86,15 +123,8 @@
       "gpName": "Hungarian GP",
       "lng": 5.971003,
       "lat": 50.4457,
-      "model": ""
-    },
-    {
-      "name": "Hungary",
-      "trackName": "Hungaroring",
-      "gpName": "Hungarian GP",
-      "lng": 19.24743,
-      "lat": 47.5798,
-      "model": ""
+      "model": "models/hungaroring-mogyorod-hungary-5xsup.stl",
+      "image": "svg/hungary.svg"
     },
     {
       "name": "Zandvoort",
@@ -102,7 +132,8 @@
       "gpName": "Dutch GP",
       "lng": 4.534503,
       "lat": 52.3842,
-      "model": ""
+      "model": "models/circuit-zandvoort-zandvoort-netherlands-5xsup.stl",
+      "image": "svg/netherlands.svg"
     },
     {
       "name": "Monza",
@@ -110,7 +141,8 @@
       "gpName": "Italian GP",
       "lng": 9.281503,
       "lat": 45.6174,
-      "model": ""
+      "model": "models/autodromo-nazionale-monza-monza-italy-5xsup.stl",
+      "image": "svg/monza.svg"
     },
     {
       "name": "Baku",
@@ -118,7 +150,8 @@
       "gpName": "Azerbaijan GP",
       "lng": 49.85323,
       "lat": 40.3729,
-      "model": ""
+      "model": "models/baku-city-circuit-baku-azerbaijan-5xsup.stl",
+      "image": "svg/azerbaijan.svg"
     },
     {
       "name": "Singapore",
@@ -126,7 +159,8 @@
       "gpName": "Singaporian GP",
       "lng": 103.86663,
       "lat": 1.2878,
-      "model": ""
+      "model": "",
+      "image": "svg/singapore.svg"
     },
     {
       "name": "Americas",
@@ -134,7 +168,8 @@
       "gpName": "US GP",
       "lng": -97.6405,
       "lat": 30.1327,
-      "model": ""
+      "model": "",
+      "image": "svg/usa.svg"
     },
     {
       "name": "Mexico",
@@ -142,7 +177,8 @@
       "gpName": "Mexican GP",
       "lng": -99.0926,
       "lat": 19.4055,
-      "model": ""
+      "model": "",
+      "image": "svg/mexico.svg"
     },
     {
       "name": "Brazil",
@@ -150,7 +186,8 @@
       "gpName": "Brazilian GP",
       "lng": -46.7008,
       "lat": -23.7038,
-      "model": ""
+      "model": "models/autodromo-jose-carlos-pace-so-paulo-brazil-5xsup.stl",
+      "image": "svg/brazil.svg"
     },
     {
       "name": "Las Vegas",
@@ -158,7 +195,8 @@
       "gpName": "Las Vegas GP",
       "lng": -115.0944,
       "lat": 36.0636,
-      "model": ""
+      "model": "",
+      "image": "svg/las_vegas.svg"
     },
     {
       "name": "Qatar",
@@ -166,7 +204,8 @@
       "gpName": "Qatar GP",
       "lng": 51.45053,
       "lat": 25.4885,
-      "model": ""
+      "model": "",
+      "image": "svg/qatar.svg"
     },
     {
       "name": "Abu Dhabi",
@@ -174,7 +213,8 @@
       "gpName": "Abu Dhabi GP",
       "lng": 54.60573,
       "lat": 24.4697,
-      "model": ""
+      "model": "models/yas-marina-circuit-abu-dhabi-united-arab-emirates.stl",
+      "image": "svg/qatar.svg"
     }
   ]
 }
