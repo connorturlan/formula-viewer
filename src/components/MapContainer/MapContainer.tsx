@@ -30,6 +30,7 @@ export const MapContainer = ({
   onInit,
   onClick,
   onMove,
+  duringMove,
   mapCenter,
 }) => {
   const [map, setMap] = useState();
@@ -122,6 +123,18 @@ export const MapContainer = ({
     initialMap.on("moveend", (event) => {
       onMove && onMove(event, mapRef.current);
     });
+
+    initialMap.on("postrender", (event) => {
+      duringMove && duringMove(event, mapRef.current);
+    });
+
+    initialMap.on("change", (event) => {
+      duringMove && duringMove(event, mapRef.current);
+    });
+
+    // initialMap.on("mapzioom", (event) => {
+    //   duringMove && duringMove(event, mapRef.current);
+    // });
 
     setMap(initialMap);
     mapRef.current = initialMap;

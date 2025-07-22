@@ -69,7 +69,7 @@ function App() {
       const track = feature as any;
       return new Style({
         image: new Icon({
-          anchor: [0.48, 0.74],
+          anchor: [0.48, 0.75],
           opacity: 1,
           src: track.get("image") || "red-pin.svg",
           height: 2350 / zLevel.current,
@@ -104,6 +104,7 @@ function App() {
         layers={[trackLayer]}
         mapCenter={[144.97, -37.8503]}
         onMove={onMapMove}
+        duringMove={onMapMove}
       />
       <WorldMap />
       <TrackList />
