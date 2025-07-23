@@ -24,6 +24,11 @@ import { PROJECTION } from "./utils/defaults";
 import { Image } from "ol/source";
 import Icon from "ol/style/Icon";
 import { SizeType } from "ol/expr/expression";
+import { TrackReplayer } from "./components/TrackReplayer";
+
+const melbourne = [144.97, -37.8503];
+const spa = [5.971003, 50.4457];
+const singapore = [103.86663, 1.2878];
 
 function App() {
   const publisher = usePub();
@@ -98,16 +103,39 @@ function App() {
     );
   });
 
+  const locationSource = new VectorSource();
+  const locationLayer = new VectorLayer({
+    style: (feature) => {
+      const track = feature as any;
+      return new Style({
+        fill: new Fill({
+          color: "#5556",
+        }),
+        stroke: new Stroke({
+          color: "#888",
+          width: 2,
+          miterLimit: 2,
+        }),
+      });
+    },
+    source: locationSource,
+  });
+
   return (
     <>
       <MapContainer
-        layers={[trackLayer]}
-        mapCenter={[144.97, -37.8503]}
+        layers={[trackLayer, locationLayer]}
+        mapCenter={melbourne}
         onMove={onMapMove}
         duringMove={onMapMove}
       />
       <WorldMap />
-      <TrackList />
+      <TrackList>
+        <TrackReplayer
+          origin={melbourne}
+          driverLayer={locationLayer}
+        />
+      </TrackList>
     </>
   );
 }

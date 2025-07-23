@@ -6,8 +6,9 @@ import type {
   TrackInterface,
   TrackSelectEvent,
 } from "../WorldMap";
+import { TrackReplayer } from "../TrackReplayer";
 
-export const TrackList = () => {
+export const TrackList = ({ children }) => {
   const [showList, setListVisibility] = useState(true);
   const selectTrack = usePub();
   return (
@@ -35,6 +36,7 @@ export const TrackList = () => {
           })}
         </div>
       )}
+      {children}
     </div>
   );
 };
