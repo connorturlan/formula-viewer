@@ -17,6 +17,8 @@ import { PROJECTION } from "./utils/defaults";
 import Icon from "ol/style/Icon";
 import { TrackReplayer } from "./components/TrackReplayer";
 import { ToastMessage } from "./components/ToastMessage";
+import { SessionReplayer } from "./components/SessionReplayer";
+import Text from "ol/style/Text";
 
 const melbourne = [144.97, -37.8503];
 // const spa = [5.971003, 50.4457];
@@ -89,6 +91,15 @@ function App() {
           width: 2,
           miterLimit: 2,
         }),
+        text: new Text({
+          // offsetY: 9,
+          font: "bold 9pt sans-serif",
+          fill: new Fill({
+            color: "#EEE",
+          }),
+          padding: [2, 4, 2, 4],
+          text: _feature.get("driver"),
+        }),
       });
     },
     source: locationSource,
@@ -106,7 +117,11 @@ function App() {
       />
       <WorldMap />
       <TrackList>
-        <TrackReplayer
+        {/* <TrackReplayer
+          origin={melbourne}
+          driverLayer={locationLayer}
+        /> */}
+        <SessionReplayer
           origin={melbourne}
           driverLayer={locationLayer}
         />

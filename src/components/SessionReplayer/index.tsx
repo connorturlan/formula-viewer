@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./TrackReplayer.module.scss";
+import styles from "./index.module.scss";
 import {
+  Drivers,
   LoadLocationData,
+  type DriverData,
   type LocationData,
 } from "../../services/OpenF1";
 import type VectorLayer from "ol/layer/Vector";
@@ -10,6 +12,11 @@ import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "../../utils/defaults";
 import { Feature } from "ol";
 import { usePub } from "../../utils/pubsub";
+import {
+  collectAllData,
+  convertDataIntoFrames,
+  type TimeFrame,
+} from "./dataCollector";
 
 // const melbourne = [144.97, -37.8503];
 // const singapore = [5.971003, 50.4457];
@@ -20,7 +27,8 @@ import { usePub } from "../../utils/pubsub";
 // const end = new Date("2023-09-16T14:00:00+00:00");
 // aus 2025
 const start = new Date("2025-03-16T04:00:00+00:00");
-const end = new Date("2025-03-16T06:00:00+00:00");
+const end = new Date("2025-03-16T04:10:00+00:00");
+// const end = new Date("2025-03-16T06:00:00+00:00");
 const lastPull = new Date(start.getTime());
 const dataFrequency = 3.7;
 const timePrecision = 1_000 / dataFrequency;
@@ -33,16 +41,23 @@ const historyLength = Math.round(
     dataFrequency
 );
 
-export const TrackReplayer = ({
+export const SessionReplayer = ({
   origin,
   driverLayer,
 }: any) => {
   const [timeValue, setTimeValue] = useState(0);
-  const [time, setTime] = useState(start);
+  const [timePosition, setTime] = useState(start);
   const [rateLimit, toggleRateLimit] = useState(false);
   const [locationData, setLocationData] = useState<
     LocationData[]
   >(new Array(historyLength));
+
+  const [driverLocationData, setDriverLocationData] =
+    useState<TimeFrame[]>(new Array(historyLength));
+  const [driverData, setDriverData] = useState<
+    DriverData[]
+  >([]);
+
   const publisher = usePub();
 
   const handleChange = (ev: any) => {
@@ -91,57 +106,16 @@ export const TrackReplayer = ({
     }
   };
 
-  const bufferLocationData = async (
-    realtime: Date,
-    bufferSeconds: number = 10
-  ) => {
-    if (rateLimit) {
-      return;
-    }
-    toggleRateLimit(true);
-    setTimeout(() => {
-      toggleRateLimit(false);
-    }, 5_000);
-
-    // get the new locations.
-    const [res, err] = await LoadLocationData(
-      time,
-      bufferSeconds
-    );
-    if (err) {
-      publisher("ErrorMessage", {
-        message: `Unable to get location data: ${err.status}. Please try again later.`,
-      });
-    }
-    publisher("ErrorMessage", {
-      message: `got location data!`,
-    });
-    lastPull.setTime(realtime.getTime());
-    const latest = getLatestLocationData(res);
-
-    // append the new locations.
-    const newLocations = locationData.slice();
-    latest.forEach(
-      (location) =>
-        (newLocations[location.index] = location)
-    );
-
-    setLocationData(newLocations);
-  };
-
   const updateLocationsOnLayer = () => {
     // console.log(
     //   `${locationData.at(timeValue - 1)} ${
     //     locationData.length
     //   }`
     // );
-    const location =
-      locationData.at(timeValue + 1)! ||
-      locationData.at(timeValue)! ||
-      locationData.at(timeValue - 1)!;
+    const frame = driverLocationData.at(timeValue)!;
     // const resolution = 0.157;
     const resolution = 0.128;
-    if (!location) return;
+    if (!frame) return;
 
     // get source
     const source = (
@@ -150,20 +124,23 @@ export const TrackReplayer = ({
     source.clear();
 
     // create point
-    const coord = fromLonLat(origin, PROJECTION);
-    const point = new Circle(coord, 20);
-    point.translate(
-      location.x * resolution + 30,
-      location.y * resolution + 170
-    );
+    frame.locations.forEach((data, driverNumber) => {
+      const coord = fromLonLat(origin, PROJECTION);
+      const point = new Circle(coord, 20);
+      point.translate(
+        data.x * resolution + 30,
+        data.y * resolution + 170
+      );
 
-    // add feature
-    source.addFeature(
-      new Feature({
-        geometry: point,
-        image: "red-pin.svg",
-      })
-    );
+      // add feature
+      source.addFeature(
+        new Feature({
+          geometry: point,
+          image: "red-pin.svg",
+          driver: driverNumber,
+        })
+      );
+    });
   };
 
   const timeRef = useRef<number>(timeValue);
@@ -185,15 +162,51 @@ export const TrackReplayer = ({
 
   useEffect(() => {
     // bufferLocationData();
-  }, [time]);
+  }, [timePosition]);
+
+  const prefire = useRef(0);
+
+  useEffect(() => {
+    prefire.current = prefire.current + 1;
+    if (prefire.current > 1) return;
+
+    const f = async () => {
+      const data = await collectAllData(start, end, 120);
+      const frames = await convertDataIntoFrames([], data);
+      console.log(data.length, data.at(0));
+      console.log(frames.length, frames.slice(0, 10));
+      setDriverLocationData(frames);
+
+      const [drivers, err] = await Drivers(9693);
+      if (err) {
+        publisher("ErrorMessage", {
+          message: `Unable to get driver data: ${err.message}. Please try again later.`,
+        });
+        console.error("unable to get driver data.", err);
+      }
+      setDriverData(drivers);
+    };
+    f();
+  }, []);
+
+  useEffect(() => {
+    console.log(driverData);
+  }, [driverData]);
+
+  useEffect(() => {
+    console.log(
+      driverLocationData.length,
+      driverLocationData.slice(0, 10)
+    );
+  }, [driverLocationData]);
 
   useEffect(() => {
     console.debug(
-      `time: ${time.toISOString()}, value: ${timeValue}`
+      `time: ${timePosition.toISOString()}, value: ${timeValue}`
     );
     timeRef.current = timeValue;
     const realtime = interpolateTime(timeValue);
-    bufferLocationData(realtime);
+    // bufferLocationData(realtime);
     updateLocationsOnLayer();
   }, [timeValue]);
 

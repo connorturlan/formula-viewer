@@ -3,39 +3,35 @@ import type { ApiError } from "./types";
 const baseUrl = "api.openf1.org";
 const apiVersion = "v1";
 let rateLimited = false;
-let rateQueue = 0;
-// const rateLimit = 100;
-// const timeoutLimit = 10_000;
+let lastRequest = Date.now();
+
+const rateLimit = 1_000;
+const timeoutLimit = 10_000;
 
 async function HandleRequest(
-  url: string,
-  requeue = false
+  url: string
 ): Promise<Response> {
-  console.debug(
-    `limited: ${rateLimited}, in queue: ${rateQueue}`
+  console.log(
+    new Date(lastRequest + rateLimit),
+    new Date(),
+    lastRequest < Date.now()
   );
+  if (lastRequest + rateLimit > Date.now()) {
+    const delay = rateLimit;
+    return new Promise((res) => {
+      setTimeout(async () => {
+        res(await HandleRequest(url));
+      }, delay);
+    });
+  } else {
+    lastRequest = Date.now();
 
-  if (!requeue) rateQueue++;
+    const res = await fetch(
+      `https://${baseUrl}/${apiVersion}/${url}`
+    );
 
-  // if (rateLimited) {
-  //   return new Promise((res, rej) => {
-  //     setTimeout(async () => {
-  //       res(await HandleRequest(url, true));
-  //     }, rateLimit);
-  //     setTimeout(async () => {
-  //       rej(undefined);
-  //     }, timeoutLimit);
-  //   });
-  // }
-  rateQueue--;
-
-  rateLimited = true;
-  const res = await fetch(
-    `https://${baseUrl}/${apiVersion}/${url}`
-  );
-  rateLimited = false;
-
-  return res;
+    return res;
+  }
 }
 
 /* 
@@ -84,8 +80,42 @@ session_key 	The unique identifier for the session. Use latest to identify the l
 team_colour 	The hexadecimal color value (RRGGBB) of the driver's team.
 team_name 	Name of the driver's team.
 */
-export async function Drivers() {
+export async function Drivers(
+  sessionKey: number
+): Promise<[DriverData[], ApiError | null]> {
   // https://api.openf1.org/v1/drivers?driver_number=1&session_key=9158
+  const res = await HandleRequest(
+    `drivers?session_key=${sessionKey}`
+  );
+
+  if (res.status !== 200) {
+    return [
+      [],
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
+  const json = await res.json();
+
+  return [json, null];
+}
+
+export interface DriverData {
+  broadcast_name: string;
+  country_code: string;
+  driver_number: number;
+  first_name: string;
+  full_name: string;
+  headshot_url: string;
+  last_name: string;
+  meeting_key: number;
+  name_acronym: string;
+  session_key: number;
+  team_colour: string;
+  team_name: string;
 }
 
 /* 
@@ -155,7 +185,7 @@ export interface LocationData {
 }
 
 export async function LoadLocationData(
-  timeNow: Date,
+  start: Date,
   secondsBuffer: number
 ): Promise<[LocationData[], ApiError | null]> {
   // https://api.openf1.org/v1/location?session_key=9161&driver_number=81&date>2023-09-16T13:03:35.200&date<2023-09-16T13:03:35.800
@@ -166,7 +196,7 @@ export async function LoadLocationData(
   // );
 
   const timeBuffer = new Date(
-    timeNow.getTime() + secondsBuffer * 1_000
+    start.getTime() + secondsBuffer * 1_000
   );
 
   // sing 2023
@@ -175,8 +205,13 @@ export async function LoadLocationData(
   // );
   // aus 2025
   const res = await HandleRequest(
-    `location?session_key=9693&driver_number=81&date>${timeNow.toISOString()}&date<${timeBuffer.toISOString()}`
+    `location?session_key=9693&date>${start.toISOString()}&date<${timeBuffer.toISOString()}`
   );
+
+  if (res.status === 401) {
+    const r = await (await fetch("example.json")).json();
+    return [r, null];
+  }
 
   if (res.status !== 200) {
     return [
