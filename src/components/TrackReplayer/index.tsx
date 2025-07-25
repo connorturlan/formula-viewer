@@ -14,6 +14,7 @@ import { Circle } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "../../utils/defaults";
 import { Feature } from "ol";
+import { usePub } from "../../utils/pubsub";
 
 // const melbourne = [144.97, -37.8503];
 // const singapore = [5.971003, 50.4457];
@@ -47,10 +48,11 @@ export const TrackReplayer = ({
   const [locationData, setLocationData] = useState<
     LocationData[]
   >(new Array(historyLength));
+  const publisher = usePub();
 
-  const handleChange = (ev: ChangeEvent) => {
+  const handleChange = (ev: any) => {
     // console.log("time:", ev.target.value);
-    setTimeValue(Number(ev.target.nodeValue));
+    setTimeValue(Number(ev.target.value));
   };
 
   const interpolateTime = (value: number) => {
@@ -107,7 +109,18 @@ export const TrackReplayer = ({
     }, 5_000);
 
     // get the new locations.
-    const res = await LoadLocationData(time, bufferSeconds);
+    const [res, err] = await LoadLocationData(
+      time,
+      bufferSeconds
+    );
+    if (err) {
+      publisher("ErrorMessage", {
+        message: `Unable to get location data: ${err.status}. Please try again later.`,
+      });
+    }
+    publisher("ErrorMessage", {
+      message: `got location data!`,
+    });
     lastPull.setTime(realtime.getTime());
     const latest = getLatestLocationData(res);
 

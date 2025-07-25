@@ -1,3 +1,5 @@
+import type { ApiError } from "./types";
+
 const baseUrl = "api.openf1.org";
 const apiVersion = "v1";
 let rateLimited = false;
@@ -155,7 +157,7 @@ export interface LocationData {
 export async function LoadLocationData(
   timeNow: Date,
   secondsBuffer: number
-): Promise<LocationData[]> {
+): Promise<[LocationData[], ApiError | null]> {
   // https://api.openf1.org/v1/location?session_key=9161&driver_number=81&date>2023-09-16T13:03:35.200&date<2023-09-16T13:03:35.800
   // "date_start":"2023-09-16T13:00:00+00:00","date_end":"2023-09-16T14:00:00+00:00"
 
@@ -176,9 +178,19 @@ export async function LoadLocationData(
     `location?session_key=9693&driver_number=81&date>${timeNow.toISOString()}&date<${timeBuffer.toISOString()}`
   );
 
+  if (res.status !== 200) {
+    return [
+      [],
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
   const json = await res.json();
 
-  return json;
+  return [json, null];
 }
 
 /* 

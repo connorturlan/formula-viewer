@@ -16,6 +16,7 @@ import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "./utils/defaults";
 import Icon from "ol/style/Icon";
 import { TrackReplayer } from "./components/TrackReplayer";
+import { ToastMessage } from "./components/ToastMessage";
 
 const melbourne = [144.97, -37.8503];
 // const spa = [5.971003, 50.4457];
@@ -109,6 +110,7 @@ function App() {
           origin={melbourne}
           driverLayer={locationLayer}
         />
+        <ToastMessage />
       </TrackList>
     </>
   );

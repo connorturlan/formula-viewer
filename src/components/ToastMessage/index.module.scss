@@ -1,0 +1,59 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  border-radius: 0 0 0 1em;
+
+  height: fit-content;
+  width: fit-content;
+  padding: 0;
+
+  overflow-y: auto;
+  pointer-events: all;
+
+  height: 100vh;
+}
+
+.Bubble {
+  background: white;
+  color: black;
+
+  height: fit-content;
+  min-width: 200px;
+  width: 20em;
+  padding: 1em;
+
+  &Show {
+    animation-duration: 0.5s;
+    animation-name: slide-in;
+  }
+  &Hide {
+    animation-duration: 0.5s;
+    animation-name: slide-out;
+    pointer-events: none;
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
