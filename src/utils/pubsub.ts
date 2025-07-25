@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 const emitter = new EventEmitter();
 
-export function UseSub(event, callback) {
+export function UseSub(event: any, callback: any) {
   const unsubscribe = () => {
     emitter.off(event, callback);
   };
@@ -17,7 +17,7 @@ export function UseSub(event, callback) {
 }
 
 export const usePub = () => {
-  return (event, data) => {
+  return (event: any, data: any) => {
     emitter.emit(event, data);
   };
 };

@@ -2,21 +2,16 @@ import { useState } from "react";
 import styles from "./TrackList.module.scss";
 import { usePub } from "../../utils/pubsub";
 import Tracks from "../WorldMap/tracks-array.json";
-import type {
-  TrackInterface,
-  TrackSelectEvent,
-} from "../WorldMap";
-import { TrackReplayer } from "../TrackReplayer";
 
-export const TrackList = ({ children }) => {
-  const [showList, setListVisibility] = useState(true);
+export const TrackList = ({ children }: any) => {
+  const [showList, _setListVisibility] = useState(true);
   const selectTrack = usePub();
   return (
     <div className={styles.Container}>
       {showList && (
         <div
           className={styles.Sidebar}
-          //   onClick={() => setListVisibility(false)}
+          // onClick={() => setListVisibility(false)}
         >
           {Tracks.tracks.map((track, index) => {
             return (

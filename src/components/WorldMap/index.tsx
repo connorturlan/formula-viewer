@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Globe, { type GlobeMethods } from "react-globe.gl";
 import Tracks from "./tracks-array.json";
-import Trackmap from "./tracks-map.json";
 import * as THREE from "three";
 import styles from "./WorldMap.module.scss";
 import { STLLoader } from "three/examples/jsm/Addons.js";
@@ -24,7 +23,7 @@ export interface TrackSelectEvent {
 }
 
 export function WorldMap({}) {
-  const [labelSize, setLabelSize] = useState(1);
+  const [labelSize, _setLabelSize] = useState(1);
   const selectedTrack = useRef(0);
   const [loadedTrack, setLoadedTrack] = useState("");
   const [showGlobe, setGlobe] = useState(true);
@@ -129,17 +128,14 @@ export function WorldMap({}) {
 
   const onLabelClick = (
     label: any,
-    event: any,
-    location: any
+    _event: any,
+    _location: any
   ) => {
     const trackIndicator = label as TrackInterface;
     selectTrack({ trackIndex: trackIndicator.index });
   };
 
   const selectTrack = (event: TrackSelectEvent) => {
-    const currentTrack = Tracks.tracks.at(
-      selectedTrack.current
-    )!;
     selectedTrack.current = event.trackIndex;
     const track = Tracks.tracks.at(event.trackIndex)!;
 
@@ -172,9 +168,6 @@ export function WorldMap({}) {
 
   UseSub("toggle3DGlobe", (e: any) => {
     setGlobe(e.visible);
-    const currentTrack = Tracks.tracks.at(
-      selectedTrack.current
-    )!;
     moveCameraTo(
       e.lng,
       e.lat,
@@ -221,9 +214,6 @@ export function WorldMap({}) {
           return p.size;
         }}
         labelsTransitionDuration={0}
-        labelSize={(d) => {
-          return d.size;
-        }}
         labelIncludeDot={false}
         // labelIncludeDot={false}
         objectsData={[

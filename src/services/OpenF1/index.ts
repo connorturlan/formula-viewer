@@ -2,8 +2,8 @@ const baseUrl = "api.openf1.org";
 const apiVersion = "v1";
 let rateLimited = false;
 let rateQueue = 0;
-const rateLimit = 100;
-const timeoutLimit = 10_000;
+// const rateLimit = 100;
+// const timeoutLimit = 10_000;
 
 async function HandleRequest(
   url: string,

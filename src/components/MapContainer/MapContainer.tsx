@@ -7,13 +7,12 @@ import View from "ol/View";
 import TileLayer from "ol/layer/Tile";
 import XYZ from "ol/source/XYZ";
 import { PROJECTION } from "../../utils/defaults";
-import { fromLonLat, transform } from "ol/proj";
+import { transform } from "ol/proj";
 import {
   convertCoord,
   convertCoordFromLatLon,
   ObjectIsEmpty,
 } from "../../utils/utils";
-import Style from "ol/style/Style";
 import { UseSub } from "../../utils/pubsub";
 
 const DEFAULT_ZOOM = 12;
@@ -32,21 +31,21 @@ export const MapContainer = ({
   onMove,
   duringMove,
   mapCenter,
-}) => {
-  const [map, setMap] = useState();
+}: any) => {
+  const [map, setMap] = useState<Map>();
   // const [mapLayers, setMapLayers] = useState();
 
   const renderCount = useRef(0);
-  const mapElement = useRef();
-  const viewRef = useRef(null);
+  const mapElement = useRef<HTMLDivElement | null>(null);
+  const viewRef = useRef<View>(undefined);
 
-  const mapRef = useRef<Map | undefined>(undefined);
+  const mapRef = useRef<Map>(undefined);
   mapRef.current = map;
 
-  const mapLayers = useRef([]);
+  const mapLayers = useRef<TileLayer<XYZ>[]>([]);
   mapLayers.current = [mapLayer, ...layers];
 
-  UseSub("MapMoveTo", (newView) => {
+  UseSub("MapMoveTo", (newView: any) => {
     if (
       ObjectIsEmpty(newView) ||
       !newView.coord ||
@@ -71,7 +70,7 @@ export const MapContainer = ({
     });
   });
 
-  UseSub("MapFitTo", (newExtent) => {
+  UseSub("MapFitTo", (newExtent: any) => {
     if (ObjectIsEmpty(newExtent)) {
       console.error(
         `[MAP]<event> map move triggered to invalid position. ${newExtent}`
@@ -80,8 +79,9 @@ export const MapContainer = ({
     }
 
     console.log(`[MAP]<event> map move to ${newExtent}`);
-    mapRef.current.getView().fit(newExtent, {
-      size: mapRef.current.getSize(),
+    const map = mapRef.current!;
+    map.getView().fit(newExtent, {
+      size: map.getSize(),
       minResolution: 2,
       duration: 800,
       padding: [48, 48, 48, 48],
@@ -100,7 +100,7 @@ export const MapContainer = ({
     viewRef.current = view;
 
     const initialMap = new Map({
-      target: mapElement.current,
+      target: mapElement.current!,
       layers: mapLayers.current,
       view,
       controls: [],
@@ -110,15 +110,15 @@ export const MapContainer = ({
       onClick && onClick(event, mapRef.current);
     });
 
-    initialMap.on("pointermove", function (e) {
-      const pixel = initialMap.getEventPixel(
-        e.originalEvent
-      );
-      const hit = initialMap.hasFeatureAtPixel(pixel);
-      initialMap.getTarget().style.cursor = hit
-        ? "pointer"
-        : "";
-    });
+    // initialMap.on("pointermove", function (e) {
+    //   const pixel = initialMap.getEventPixel(
+    //     e.originalEvent
+    //   );
+    //   const hit = initialMap.hasFeatureAtPixel(pixel);
+    //   initialMap.getTarget()!.style.cursor = hit
+    //     ? "pointer"
+    //     : "";
+    // });
 
     initialMap.on("moveend", (event) => {
       onMove && onMove(event, mapRef.current);

@@ -1,26 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type ChangeEvent,
+} from "react";
 import styles from "./TrackReplayer.module.scss";
-import { usePub } from "../../utils/pubsub";
-import Tracks from "../WorldMap/tracks-array.json";
-import type {
-  TrackInterface,
-  TrackSelectEvent,
-} from "../WorldMap";
 import {
   LoadLocationData,
-  Location,
-  Position,
   type LocationData,
 } from "../../services/OpenF1";
-import type Layer from "ol/layer/Layer";
 import type VectorLayer from "ol/layer/Vector";
-import { Circle, Point } from "ol/geom";
+import { Circle } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "../../utils/defaults";
 import { Feature } from "ol";
 
-const melbourne = [144.97, -37.8503];
-const singapore = [5.971003, 50.4457];
+// const melbourne = [144.97, -37.8503];
+// const singapore = [5.971003, 50.4457];
 // "date_start":"2023-09-16T13:00:00+00:00","date_end":"2023-09-16T14:00:00+00:00"
 
 // sing 2023
@@ -41,7 +37,10 @@ const historyLength = Math.round(
     dataFrequency
 );
 
-export const TrackReplayer = ({ origin, driverLayer }) => {
+export const TrackReplayer = ({
+  origin,
+  driverLayer,
+}: any) => {
   const [timeValue, setTimeValue] = useState(0);
   const [time, setTime] = useState(start);
   const [rateLimit, toggleRateLimit] = useState(false);
@@ -49,9 +48,9 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
     LocationData[]
   >(new Array(historyLength));
 
-  const handleChange = (ev) => {
+  const handleChange = (ev: ChangeEvent) => {
     // console.log("time:", ev.target.value);
-    setTimeValue(Number(ev.target.value));
+    setTimeValue(Number(ev.target.nodeValue));
   };
 
   const interpolateTime = (value: number) => {
