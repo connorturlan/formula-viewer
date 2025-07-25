@@ -30,18 +30,21 @@ const singapore = [5.971003, 50.4457];
 const start = new Date("2025-03-16T04:00:00+00:00");
 const end = new Date("2025-03-16T06:00:00+00:00");
 const lastPull = new Date(start.getTime());
-const timePrecision = 1_000;
+const dataFrequency = 3.7;
+const timePrecision = 1_000 / dataFrequency;
 const timeResolution =
   (end.getTime() - start.getTime()) / timePrecision;
 
 var timer: number;
-const historyLength =
-  ((end.getTime() - start.getTime()) / 1_000) * 4;
+const historyLength = Math.round(
+  ((end.getTime() - start.getTime()) / 1_000) *
+    dataFrequency
+);
 
 export const TrackReplayer = ({ origin, driverLayer }) => {
   const [timeValue, setTimeValue] = useState(0);
   const [time, setTime] = useState(start);
-  console.log(historyLength);
+  const [rateLimit, toggleRateLimit] = useState(false);
   const [locationData, setLocationData] = useState<
     LocationData[]
   >(new Array(historyLength));
@@ -55,7 +58,7 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
     const interpolatedTime =
       start.getTime() + value * timePrecision;
 
-    console.log(
+    console.debug(
       `start: ${start.getTime()}, value: ${value}, interpolatedTime: ${interpolatedTime}, diff: ${
         value * timePrecision
       }`
@@ -68,7 +71,10 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
 
   const indexTimestamp = (timestamp: Date) => {
     const d = new Date(timestamp);
-    return (d.getTime() / 1_000) * 4;
+    return Math.round(
+      ((d.getTime() - start.getTime()) / 1_000) *
+        dataFrequency
+    );
   };
 
   const getLatestLocationData = (
@@ -91,11 +97,15 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
 
   const bufferLocationData = async (
     realtime: Date,
-    bufferSeconds: number = 1
+    bufferSeconds: number = 10
   ) => {
-    if (time.getTime() < lastPull.getTime() + 2_000) {
+    if (rateLimit) {
       return;
     }
+    toggleRateLimit(true);
+    setTimeout(() => {
+      toggleRateLimit(false);
+    }, 5_000);
 
     // get the new locations.
     const res = await LoadLocationData(time, bufferSeconds);
@@ -108,13 +118,20 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
       (location) =>
         (newLocations[location.index] = location)
     );
-    newLocations.push(...latest);
 
     setLocationData(newLocations);
   };
 
   const updateLocationsOnLayer = () => {
-    const location = locationData.at(-1)!;
+    // console.log(
+    //   `${locationData.at(timeValue - 1)} ${
+    //     locationData.length
+    //   }`
+    // );
+    const location =
+      locationData.at(timeValue + 1)! ||
+      locationData.at(timeValue)! ||
+      locationData.at(timeValue - 1)!;
     // const resolution = 0.157;
     const resolution = 0.128;
     if (!location) return;
@@ -123,14 +140,14 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
     const source = (
       driverLayer as VectorLayer
     ).getSource()!;
-    // source.clear();
+    source.clear();
 
     // create point
     const coord = fromLonLat(origin, PROJECTION);
     const point = new Circle(coord, 20);
     point.translate(
-      location.x * resolution,
-      location.y * resolution
+      location.x * resolution + 30,
+      location.y * resolution + 170
     );
 
     // add feature
@@ -153,19 +170,18 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
 
     if (timeRef.current > timeResolution) return;
 
-    const seconds = 0.5;
+    const seconds = 1 / dataFrequency;
     timer = setInterval(() => {
-      setTimeValue(timeRef.current + seconds);
+      setTimeValue(timeRef.current + 1);
     }, seconds * 1_000);
   };
 
   useEffect(() => {
-    console.log(`time: ${time.toISOString()}`);
     // bufferLocationData();
   }, [time]);
 
   useEffect(() => {
-    console.log(
+    console.debug(
       `time: ${time.toISOString()}, value: ${timeValue}`
     );
     timeRef.current = timeValue;
@@ -173,10 +189,6 @@ export const TrackReplayer = ({ origin, driverLayer }) => {
     bufferLocationData(realtime);
     updateLocationsOnLayer();
   }, [timeValue]);
-
-  useEffect(() => {
-    console.log(`location count: ${locationData.length}`);
-  }, [locationData]);
 
   return (
     <div className={styles.Container}>

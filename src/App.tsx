@@ -48,7 +48,6 @@ function App() {
         altitude: 0.3,
       });
     }
-    console.log(zLevel.current);
   };
 
   const duringMapMove = (event, map) => {

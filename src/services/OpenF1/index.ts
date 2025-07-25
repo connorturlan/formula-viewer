@@ -9,23 +9,22 @@ async function HandleRequest(
   url: string,
   requeue = false
 ): Promise<Response> {
-  console.log(
+  console.debug(
     `limited: ${rateLimited}, in queue: ${rateQueue}`
   );
 
   if (!requeue) rateQueue++;
 
-  if (rateLimited) {
-    console.log("limited");
-    return new Promise((res, rej) => {
-      setTimeout(async () => {
-        res(await HandleRequest(url, true));
-      }, rateLimit);
-      setTimeout(async () => {
-        rej(undefined);
-      }, timeoutLimit);
-    });
-  }
+  // if (rateLimited) {
+  //   return new Promise((res, rej) => {
+  //     setTimeout(async () => {
+  //       res(await HandleRequest(url, true));
+  //     }, rateLimit);
+  //     setTimeout(async () => {
+  //       rej(undefined);
+  //     }, timeoutLimit);
+  //   });
+  // }
   rateQueue--;
 
   rateLimited = true;
@@ -160,9 +159,9 @@ export async function LoadLocationData(
   // https://api.openf1.org/v1/location?session_key=9161&driver_number=81&date>2023-09-16T13:03:35.200&date<2023-09-16T13:03:35.800
   // "date_start":"2023-09-16T13:00:00+00:00","date_end":"2023-09-16T14:00:00+00:00"
 
-  console.log(
-    `getting data for ${timeNow.toISOString()} + ${secondsBuffer} seconds`
-  );
+  // console.log(
+  //   `getting data for ${timeNow.toISOString()} + ${secondsBuffer} seconds`
+  // );
 
   const timeBuffer = new Date(
     timeNow.getTime() + secondsBuffer * 1_000
@@ -178,8 +177,6 @@ export async function LoadLocationData(
   );
 
   const json = await res.json();
-
-  console.log(json as LocationData[]);
 
   return json;
 }
