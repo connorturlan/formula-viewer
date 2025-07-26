@@ -2,11 +2,9 @@ import type { ApiError } from "./types";
 
 const baseUrl = "api.openf1.org";
 const apiVersion = "v1";
-let rateLimited = false;
 let lastRequest = Date.now();
 
 const rateLimit = 1_000;
-const timeoutLimit = 10_000;
 
 async function HandleRequest(
   url: string

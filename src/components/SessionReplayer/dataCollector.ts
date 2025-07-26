@@ -1,6 +1,5 @@
 import {
   LoadLocationData,
-  type DriverData,
   type LocationData,
 } from "../../services/OpenF1";
 
@@ -49,7 +48,6 @@ export interface TimeFrame {
 }
 
 function convertDataChunkIntoFrames(
-  driversData: DriverData[],
   locationData: LocationData[]
 ): TimeFrame {
   const frame: TimeFrame = {
@@ -70,7 +68,6 @@ function convertDataChunkIntoFrames(
 }
 
 export async function convertDataIntoFrames(
-  driversData: DriverData[],
   locationData: LocationData[]
 ): Promise<TimeFrame[]> {
   let idate = locationData.at(0)!.date;
@@ -80,7 +77,6 @@ export async function convertDataIntoFrames(
   locationData.forEach((location) => {
     if (location.date != idate) {
       const frame = convertDataChunkIntoFrames(
-        driversData,
         chunk.slice()
       );
       frames.push(frame);

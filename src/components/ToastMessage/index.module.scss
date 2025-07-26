@@ -14,7 +14,6 @@
   padding: 0;
 
   overflow-y: auto;
-  pointer-events: all;
 
   height: 100vh;
 }
@@ -27,6 +26,7 @@
   min-width: 200px;
   width: 20em;
   padding: 1em;
+  pointer-events: all;
 
   &Show {
     animation-duration: 0.5s;

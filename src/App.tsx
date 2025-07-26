@@ -15,7 +15,6 @@ import trackArray from "./components/WorldMap/tracks-array.json";
 import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "./utils/defaults";
 import Icon from "ol/style/Icon";
-import { TrackReplayer } from "./components/TrackReplayer";
 import { ToastMessage } from "./components/ToastMessage";
 import { SessionReplayer } from "./components/SessionReplayer";
 import Text from "ol/style/Text";
@@ -83,22 +82,37 @@ function App() {
   const locationLayer = new VectorLayer({
     style: (_feature) => {
       return new Style({
+        zIndex:
+          _feature.get("driver_position") ||
+          _feature.get("driver") ||
+          0,
         fill: new Fill({
-          color: "#5556",
+          color: "#FFFFFF",
         }),
         stroke: new Stroke({
-          color: "#888",
-          width: 2,
+          color: `#${
+            _feature.get("driver_colour") || "333"
+          }`,
+          width: 6,
           miterLimit: 2,
         }),
         text: new Text({
-          // offsetY: 9,
-          font: "bold 9pt sans-serif",
+          justify: "center",
+          textBaseline: "top",
+          offsetY: -4.5,
+          font: "bold 9pt  sans-serif",
           fill: new Fill({
-            color: "#EEE",
+            color: "#222",
           }),
           padding: [2, 4, 2, 4],
-          text: _feature.get("driver"),
+          text: `${_feature.get("driver")}\n${_feature.get(
+            "driver_name"
+          )}`,
+          stroke: new Stroke({
+            color: "#FFFFFF",
+            width: 4,
+            miterLimit: 2,
+          }),
         }),
       });
     },

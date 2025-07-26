@@ -28,10 +28,14 @@ export const ToastMessage = () => {
     setMessages(newMessages);
   };
 
+  const handleInfoMessage = (event: any) => {
+    handleIncommingMessage(event.message!);
+  };
   const handleErrorMessage = (event: any) => {
     handleIncommingMessage(event.message!);
   };
 
+  UseSub("InfoMessage", handleInfoMessage);
   UseSub("ErrorMessage", handleErrorMessage);
 
   useEffect(() => {
