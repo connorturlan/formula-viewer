@@ -13,7 +13,7 @@ import { usePub } from "../../utils/pubsub";
 import {
   collectAllData,
   convertDataIntoFrames,
-  type TimeFrame,
+  type LocationTimeFrame,
 } from "./dataCollector";
 
 // const melbourne = [144.97, -37.8503];
@@ -47,7 +47,7 @@ export const SessionReplayer = ({
   const [timePosition, setTime] = useState(start);
 
   const [driverLocationData, setDriverLocationData] =
-    useState<TimeFrame[]>(new Array(historyLength));
+    useState<LocationTimeFrame[]>(new Array(historyLength));
   const [driverData, setDriverData] = useState<
     Map<number, DriverData>
   >(new Map<number, DriverData>());
@@ -104,10 +104,6 @@ export const SessionReplayer = ({
         driverData.get(driverNumber)?.name_acronym || "";
       const driverColour =
         driverData.get(driverNumber)?.team_colour || "";
-      console.log(
-        driverNumber,
-        driverData.get(driverNumber)
-      );
 
       // add feature
       source.addFeature(

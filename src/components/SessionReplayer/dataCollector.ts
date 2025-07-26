@@ -1,6 +1,8 @@
 import {
   LoadLocationData,
+  Position,
   type LocationData,
+  type PositionData,
 } from "../../services/OpenF1";
 
 async function collectDataChunk(
@@ -42,15 +44,15 @@ export interface TimeLocationData {
   z: number;
 }
 
-export interface TimeFrame {
+export interface LocationTimeFrame {
   timestamp: Date;
   locations: Map<number, TimeLocationData>;
 }
 
 function convertDataChunkIntoFrames(
   locationData: LocationData[]
-): TimeFrame {
-  const frame: TimeFrame = {
+): LocationTimeFrame {
+  const frame: LocationTimeFrame = {
     timestamp: locationData.at(0)!.date!,
     locations: new Map<number, TimeLocationData>(),
   };
@@ -69,10 +71,10 @@ function convertDataChunkIntoFrames(
 
 export async function convertDataIntoFrames(
   locationData: LocationData[]
-): Promise<TimeFrame[]> {
+): Promise<LocationTimeFrame[]> {
   let idate = locationData.at(0)!.date;
   let chunk: LocationData[] = [];
-  const frames: TimeFrame[] = [];
+  const frames: LocationTimeFrame[] = [];
 
   locationData.forEach((location) => {
     if (location.date != idate) {
@@ -87,4 +89,33 @@ export async function convertDataIntoFrames(
   });
 
   return frames;
+}
+
+export interface PositionTimeFrame {
+  timestamp: Date;
+  positions: Map<number, number>;
+}
+
+export async function collectAllPositionData(): Promise<
+  Promise<PositionData[]>
+> {
+  const [res, err] = await Position(9693);
+  if (err) {
+    console.error("Error while fetching chunk.");
+  }
+
+  return res;
+}
+
+export async function convertPositionDataIntoFrames(
+  positionData: PositionData[],
+  locationFrames: LocationTimeFrame[]
+): Promise<PositionTimeFrame[]> {
+  const frames:PositionTimeFrame[] = []
+
+  lastDataIndex = 0;
+
+  locationFrames.forEach((frame)=>{
+    
+  })
 }

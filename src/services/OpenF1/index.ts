@@ -269,9 +269,41 @@ meeting_key 	The unique identifier for the meeting. Use latest to identify the l
 position 	Position of the driver (starts at 1).
 session_key 	The unique identifier for the session. Use latest to identify the latest or current session.
 */
-export async function Position() {
+export async function Position(
+  sessionKey: number
+): Promise<[PositionData[], ApiError | null]> {
   // https://api.openf1.org/v1/position?meeting_key=1217&driver_number=40&position<=3
+  const res = await HandleRequest(
+    `position?session_key=$${sessionKey}`
+  );
+
+  if (res.status === 401) {
+    const r = await (await fetch("example.json")).json();
+    return [r, null];
+  }
+
+  if (res.status !== 200) {
+    return [
+      [],
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
+  const json = await res.json();
+
+  return [json, null];
 }
+
+export type PositionData = {
+  date: Date;
+  driver_number: number;
+  meeting_key: number;
+  position: number;
+  session_key: number;
+};
 
 /* 
 Provides information about race control (racing incidents, flags, safety car, ...).
