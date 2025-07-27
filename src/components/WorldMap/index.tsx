@@ -27,7 +27,7 @@ export function WorldMap({}) {
   const selectedTrack = useRef(0);
   const [loadedTrack, setLoadedTrack] = useState("");
   const [showGlobe, setGlobe] = useState(true);
-  const [trackModel, setTrackModel] = useState<
+  const [_trackModel, setTrackModel] = useState<
     THREE.Object3D<THREE.Object3DEventMap> | undefined
   >(undefined);
 
@@ -83,6 +83,7 @@ export function WorldMap({}) {
     }
   };
 
+  // @ts-ignore
   const loadTrack = (trackName: string) => {
     trackName = trackName || "models/albert_park.stl";
     if (loadedTrack == trackName) return;

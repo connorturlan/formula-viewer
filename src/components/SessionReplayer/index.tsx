@@ -44,8 +44,8 @@ export const SessionTimeKeeper = () => {
   const [timerEnabled, setTimerEnabled] = useState(false);
   const [timeValue, setTimeValue] = useState(-1);
   const [timePosition, setTime] = useState(start);
-  const [events, setEvents] = useState<any[]>([]);
-  const [driverData, setDriverData] = useState<
+  const [events, _setEvents] = useState<any[]>([]);
+  const [_driverData, setDriverData] = useState<
     Map<number, DriverData>
   >(new Map<number, DriverData>());
 

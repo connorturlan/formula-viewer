@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./index.module.scss";
 import { UseSub } from "../../utils/pubsub";
 
@@ -7,9 +7,11 @@ export interface ToastMessageEvent {
 }
 
 export const DriverPositionList = () => {
-  const [positions, setPositions] = useState<string[]>([]);
+  const [positions, _setPositions] = useState<string[]>([]);
 
-  const onPositionUpdate = (positionChangeEvent) => {};
+  const onPositionUpdate = (
+    _positionChangeEvent: any
+  ) => {};
 
   UseSub("PositionUpdate", onPositionUpdate);
 
