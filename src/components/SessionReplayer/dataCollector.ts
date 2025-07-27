@@ -124,13 +124,40 @@ export async function collectAllPositionData(): Promise<
   return res;
 }
 
+export function convertPositionChunkIntoFrame(
+  positionData: PositionData[]
+): PositionTimeFrame {
+  const frame: PositionTimeFrame = {
+    timestamp: positionData.at(0)!.date!,
+    positions: new Map<number, number>(),
+  };
+
+  positionData.forEach((posData) => {
+    const { position } = posData;
+    frame.positions.set(posData.driver_number, position);
+  });
+
+  return frame;
+}
+
 export async function convertPositionDataIntoFrames(
-  positionData: PositionData[],
-  locationFrames: LocationTimeFrame[]
+  positionData: PositionData[]
 ): Promise<PositionTimeFrame[]> {
+  let idate = positionData.at(0)!.date;
+  let chunk: PositionData[] = [];
   const frames: PositionTimeFrame[] = [];
 
-  lastDataIndex = 0;
+  positionData.forEach((position) => {
+    if (position.date != idate) {
+      const frame = convertPositionChunkIntoFrame(
+        chunk.slice()
+      );
+      frames.push(frame);
+      chunk = [];
+      idate = position.date;
+    }
+    chunk.push(position);
+  });
 
-  locationFrames.forEach((frame) => {});
+  return frames;
 }

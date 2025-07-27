@@ -175,7 +175,7 @@ export function WorldMap({}) {
     );
   });
 
-  const DARK = true;
+  const DARK = false;
 
   return (
     <div
