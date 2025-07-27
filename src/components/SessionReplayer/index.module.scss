@@ -1,19 +1,28 @@
 .Container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 
   position: absolute;
-  top: 0;
-  left: 0;
+  bottom: 0;
 
-  height: 100vh;
   width: 100vw;
+
+  margin: 24px 0px;
 
   pointer-events: none;
 
   & * {
     pointer-events: all;
+  }
+
+  &Section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
   }
 }
 
@@ -23,10 +32,29 @@
   flex-direction: column;
   background-color: white;
   color: black;
-  padding: 0 24px;
+  padding: 24px;
 
   pointer-events: all;
   overflow-y: auto;
+
+  &Loader::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background-color: red;
+  }
+  &Loader {
+    background: inherit;
+  }
+  &Loader::-moz-range-track {
+    background-color: #222222a0;
+  }
+  &Loader::-moz-range-progress {
+    background-color: #2288eea0;
+  }
+  &Loader::-moz-range-thumb {
+    appearance: none;
+    background: none;
+    border: none;
+  }
 
   &Label {
     margin: 0;

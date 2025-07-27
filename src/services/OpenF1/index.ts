@@ -9,11 +9,6 @@ const rateLimit = 1_000;
 async function HandleRequest(
   url: string
 ): Promise<Response> {
-  console.log(
-    new Date(lastRequest + rateLimit),
-    new Date(),
-    lastRequest < Date.now()
-  );
   if (lastRequest + rateLimit > Date.now()) {
     const delay = rateLimit;
     return new Promise((res) => {

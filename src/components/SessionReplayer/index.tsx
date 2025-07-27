@@ -9,7 +9,7 @@ import { Circle } from "ol/geom";
 import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "../../utils/defaults";
 import { Feature } from "ol";
-import { usePub } from "../../utils/pubsub";
+import { usePub, UseSub } from "../../utils/pubsub";
 import {
   collectAllData,
   convertDataIntoFrames,
@@ -25,7 +25,7 @@ import {
 // const end = new Date("2023-09-16T14:00:00+00:00");
 // aus 2025
 const start = new Date("2025-03-16T04:00:00+00:00");
-const end = new Date("2025-03-16T04:10:00+00:00");
+const end = new Date("2025-03-16T04:30:00+00:00");
 // const end = new Date("2025-03-16T06:00:00+00:00");
 const dataFrequency = 3.7;
 const timePrecision = 1_000 / dataFrequency;
@@ -43,7 +43,7 @@ export const SessionReplayer = ({
   driverLayer,
 }: any) => {
   const [timerEnabled, setTimerEnabled] = useState(false);
-  const [timeValue, setTimeValue] = useState(0);
+  const [timeValue, setTimeValue] = useState(-1);
   const [timePosition, setTime] = useState(start);
 
   const [driverLocationData, setDriverLocationData] =
@@ -51,6 +51,9 @@ export const SessionReplayer = ({
   const [driverData, setDriverData] = useState<
     Map<number, DriverData>
   >(new Map<number, DriverData>());
+
+  const [loadingTotal, setLoadingTotal] = useState(-1);
+  const [loadingValue, setLoadingValue] = useState(-1);
 
   const publisher = usePub();
 
@@ -120,25 +123,23 @@ export const SessionReplayer = ({
 
   const timeRef = useRef<number>(timeValue);
   const toggleTimer = (enabled: boolean) => {
+    setTimerEnabled(enabled);
     console.log(
       `timer is ${enabled ? "enabled" : "disabled"}`
     );
     clearInterval(timer);
-    setTimerEnabled(enabled);
 
     if (!enabled) return;
 
-    if (timeRef.current > timeResolution) return;
+    if (timeRef.current > timeResolution) {
+      return;
+    }
 
     const seconds = 1 / dataFrequency;
     timer = setInterval(() => {
       setTimeValue(timeRef.current + 1);
     }, seconds * 1_000);
   };
-
-  useEffect(() => {
-    // bufferLocationData();
-  }, [timePosition]);
 
   const prefire = useRef(0);
 
@@ -169,6 +170,8 @@ export const SessionReplayer = ({
       });
       setDriverData(driverMap);
 
+      setTimeValue(0);
+
       publisher("InfoMessage", {
         message: `Session loaded!`,
       });
@@ -191,38 +194,47 @@ export const SessionReplayer = ({
     console.debug(
       `time: ${timePosition.toISOString()}, value: ${timeValue}`
     );
-    // timeRef.current = timeValue;
+    timeRef.current = timeValue;
     setTime(interpolateTime(timeValue));
     updateLocationsOnLayer();
   }, [timeValue]);
 
+  UseSub("LocationDataLoad", (event: any) => {
+    setLoadingValue(event.progress);
+    setLoadingTotal(event.total);
+  });
+
   return (
     <div className={styles.Container}>
-      <input
-        className={styles.Input}
-        type="range"
-        min={0}
-        max={timeResolution}
-        value={timeValue}
-        onChange={handleChange}
-      />
-      {timerEnabled ? (
+      <div className={styles.ContainerSection}>
+        {loadingValue < loadingTotal && (
+          <input
+            className={`${styles.Input} ${styles.InputLoader}`}
+            type="range"
+            min={0}
+            max={loadingTotal}
+            value={loadingValue}
+            readOnly
+          />
+        )}
+      </div>
+      <div className={styles.ContainerSection}>
+        <input
+          className={styles.Input}
+          type="range"
+          min={0}
+          max={timeResolution}
+          value={timeValue}
+          onChange={handleChange}
+        />
         <input
           type="button"
-          value={"PAUSE"}
+          value={timerEnabled ? "PAUSE" : "PLAY"}
           onClick={() => {
-            toggleTimer(false);
+            toggleTimer(!timerEnabled);
           }}
         />
-      ) : (
-        <input
-          type="button"
-          value={"PLAY"}
-          onClick={() => {
-            toggleTimer(true);
-          }}
-        />
-      )}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import {
   type LocationData,
   type PositionData,
 } from "../../services/OpenF1";
+import { usePub } from "../../utils/pubsub";
 
 async function collectDataChunk(
   start: Date,
@@ -26,7 +27,18 @@ export async function collectAllData(
 ): Promise<LocationData[]> {
   const idate = new Date(start.getTime());
   const chunks: LocationData[] = [];
+  const total =
+    (end.getTime() - start.getTime()) / (timestep * 1_000) -
+    1;
+
+  const publisher = usePub();
+
   while (idate.getTime() < end.getTime()) {
+    const index =
+      (idate.getTime() - start.getTime()) /
+      (timestep * 1_000);
+    console.debug(`getting chunk ${index}/${total}`);
+
     const jdate = new Date(
       idate.getTime() + timestep * 1_000
     );
@@ -34,6 +46,11 @@ export async function collectAllData(
     const res = await collectDataChunk(idate, jdate);
     chunks.push(...res);
     idate.setTime(jdate.getTime());
+
+    publisher("LocationDataLoad", {
+      progress: index,
+      total,
+    });
   }
   return chunks;
 }
@@ -111,11 +128,9 @@ export async function convertPositionDataIntoFrames(
   positionData: PositionData[],
   locationFrames: LocationTimeFrame[]
 ): Promise<PositionTimeFrame[]> {
-  const frames:PositionTimeFrame[] = []
+  const frames: PositionTimeFrame[] = [];
 
   lastDataIndex = 0;
 
-  locationFrames.forEach((frame)=>{
-    
-  })
+  locationFrames.forEach((frame) => {});
 }

@@ -123,7 +123,7 @@ export function WorldMap({}) {
   };
 
   const onComponentLoad = () => {
-    loadTrack("models/albert_park.stl");
+    // loadTrack("models/albert_park.stl");
   };
 
   const onLabelClick = (
@@ -139,7 +139,7 @@ export function WorldMap({}) {
     selectedTrack.current = event.trackIndex;
     const track = Tracks.tracks.at(event.trackIndex)!;
 
-    loadTrack(track.model);
+    // loadTrack(track.model);
     // const midpoint = [
     //   ((currentTrack.lng + track.lng) % 360) / 2,
     //   ((currentTrack.lat + track.lat) % 180) / 2,
@@ -175,6 +175,8 @@ export function WorldMap({}) {
     );
   });
 
+  const DARK = true;
+
   return (
     <div
       className={
@@ -187,9 +189,12 @@ export function WorldMap({}) {
         onGlobeReady={onReady}
         onZoom={onZoom}
         globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-water.png"
-        globeTileEngineUrl={(x, y, level) =>
-          `https://mt0.google.com/vt/lyrs=p&hl=en&x=${x}&y=${y}&z=${level}`
-        }
+        globeTileEngineUrl={(x, y, level) => {
+          return DARK
+            ? `https://api.maptiler.com/maps/dataviz-dark/${level}/${x}/${y}@2x.png?key=0AtPstDdcLrwq9kMIxnI`
+            : // ? `https://api.maptiler.com/maps/basic-v2-dark/256/${level}/${x}/${y}.png?key=0AtPstDdcLrwq9kMIxnI`
+              `https://mt0.google.com/vt/lyrs=p&hl=en&x=${x}&y=${y}&z=${level}`;
+        }}
         // backgroundColor={showGlobe ? "#000011" : "#00000000"}
         // showAtmosphere={showGlobe}
         // showGlobe={showGlobe}
@@ -216,11 +221,11 @@ export function WorldMap({}) {
         labelsTransitionDuration={0}
         labelIncludeDot={false}
         // labelIncludeDot={false}
-        objectsData={[
-          tracksData.at(selectedTrack.current)!,
-        ]}
-        objectAltitude={0.00001}
-        objectThreeObject={trackModel}
+        // objectsData={[
+        //   tracksData.at(selectedTrack.current)!,
+        // ]}
+        // objectAltitude={0.00001}
+        // objectThreeObject={trackModel}
       />
     </div>
   );

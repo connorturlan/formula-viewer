@@ -16,10 +16,13 @@ import {
 import { UseSub } from "../../utils/pubsub";
 
 const DEFAULT_ZOOM = 12;
+const DARK = true;
 
 const mapLayer = new TileLayer({
   source: new XYZ({
-    url: "https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}",
+    url: DARK
+      ? "https://api.maptiler.com/maps/basic-v2-dark/256/{z}/{x}/{y}.png?key=0AtPstDdcLrwq9kMIxnI"
+      : "https://mt0.google.com/vt/lyrs=p&hl=en&x={x}&y={y}&z={z}",
     transition: 0,
   }),
 });
@@ -44,6 +47,7 @@ export const MapContainer = ({
 
   const mapLayers = useRef<TileLayer<XYZ>[]>([]);
   mapLayers.current = [mapLayer, ...layers];
+  // mapLayers.current = layers;
 
   UseSub("MapMoveTo", (newView: any) => {
     if (
