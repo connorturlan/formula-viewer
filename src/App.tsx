@@ -16,7 +16,11 @@ import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "./utils/defaults";
 import Icon from "ol/style/Icon";
 import { ToastMessage } from "./components/ToastMessage";
-import { SessionReplayer } from "./components/SessionReplayer";
+import {
+  DriverLocationReplayer,
+  DriverPositionReplayer,
+  SessionTimeKeeper,
+} from "./components/SessionReplayer";
 import Text from "ol/style/Text";
 
 const melbourne = [144.97, -37.8503];
@@ -135,11 +139,13 @@ function App() {
           origin={melbourne}
           driverLayer={locationLayer}
         /> */}
-        <SessionReplayer
+        <SessionTimeKeeper />
+        <DriverLocationReplayer
           origin={melbourne}
           driverLayer={locationLayer}
         />
         <ToastMessage />
+        <DriverPositionReplayer />
       </TrackList>
     </>
   );

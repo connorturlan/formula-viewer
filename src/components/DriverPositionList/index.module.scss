@@ -1,3 +1,62 @@
-.Container{
-  
+.Container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  margin: 24px;
+
+  pointer-events: none;
+}
+
+.List {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  // background-color: #eeeeee40;
+  width: fit-content;
+
+  gap: 4px;
+
+  &Item {
+    width: 100%;
+    background-color: #eeeeee40;
+    border-radius: 8px;
+    padding: 0 4px;
+
+    text-align: justify;
+    font-size: larger;
+    font-weight: bolder;
+
+    animation-duration: 2s;
+    animation-name: position-change;
+
+    & * {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+@keyframes position-change {
+  from {
+    outline: 2px solid #ffa500;
+  }
+  to {
+    outline: 2px solid #ffa50000;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }

@@ -269,7 +269,7 @@ export async function Position(
 ): Promise<[PositionData[], ApiError | null]> {
   // https://api.openf1.org/v1/position?meeting_key=1217&driver_number=40&position<=3
   const res = await HandleRequest(
-    `position?session_key=$${sessionKey}`
+    `position?session_key=${sessionKey}`
   );
 
   if (res.status === 401) {

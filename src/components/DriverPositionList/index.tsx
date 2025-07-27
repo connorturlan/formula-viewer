@@ -1,25 +1,35 @@
-import { useState } from "react";
 import styles from "./index.module.scss";
-import { UseSub } from "../../utils/pubsub";
+import type { DriverData } from "../../services/OpenF1";
 
-export interface ToastMessageEvent {
-  message: string;
+export interface DriverPositionListProps {
+  driverData: Map<number, DriverData>;
+  positions: number[];
 }
 
-export const DriverPositionList = () => {
-  const [positions, _setPositions] = useState<string[]>([]);
-
-  const onPositionUpdate = (
-    _positionChangeEvent: any
-  ) => {};
-
-  UseSub("PositionUpdate", onPositionUpdate);
-
+export const DriverPositionList = ({
+  driverData,
+  positions,
+}: DriverPositionListProps) => {
   return (
     <div className={styles.Container}>
-      {positions.map((pos, index) => {
-        return <div key={index}>{pos}</div>;
-      })}
+      <div className={styles.List}>
+        {positions.map((pos: any, index: number) => {
+          return (
+            <div
+              key={
+                `${index}` +
+                (driverData.get(pos)?.name_acronym || "a")
+              }
+              className={styles.ListItem}
+            >
+              <p>
+                {index + 1}{" "}
+                {driverData.get(pos)?.name_acronym || ""}
+              </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

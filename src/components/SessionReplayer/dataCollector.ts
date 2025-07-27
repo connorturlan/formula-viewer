@@ -6,6 +6,10 @@ import {
 } from "../../services/OpenF1";
 import { usePub } from "../../utils/pubsub";
 
+export interface EventTimeFrame {
+  timestamp: Date;
+}
+
 async function collectDataChunk(
   start: Date,
   end: Date
@@ -55,16 +59,16 @@ export async function collectAllData(
   return chunks;
 }
 
-export interface TimeLocationData {
+export type TimeLocationData = {
   x: number;
   y: number;
   z: number;
-}
+};
 
-export interface LocationTimeFrame {
+export type LocationTimeFrame = {
   timestamp: Date;
   locations: Map<number, TimeLocationData>;
-}
+};
 
 function convertDataChunkIntoFrames(
   locationData: LocationData[]
@@ -108,10 +112,10 @@ export async function convertDataIntoFrames(
   return frames;
 }
 
-export interface PositionTimeFrame {
+export type PositionTimeFrame = {
   timestamp: Date;
   positions: Map<number, number>;
-}
+};
 
 export async function collectAllPositionData(): Promise<
   Promise<PositionData[]>
@@ -133,8 +137,10 @@ export function convertPositionChunkIntoFrame(
   };
 
   positionData.forEach((posData) => {
-    const { position } = posData;
-    frame.positions.set(posData.driver_number, position);
+    frame.positions.set(
+      posData.driver_number,
+      posData.position
+    );
   });
 
   return frame;

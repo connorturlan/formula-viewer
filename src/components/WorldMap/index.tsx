@@ -176,7 +176,7 @@ export function WorldMap({}) {
     );
   });
 
-  const DARK = false;
+  const DARK = true;
 
   return (
     <div
@@ -192,7 +192,7 @@ export function WorldMap({}) {
         globeImageUrl="//cdn.jsdelivr.net/npm/three-globe/example/img/earth-water.png"
         globeTileEngineUrl={(x, y, level) => {
           return DARK
-            ? `https://api.maptiler.com/maps/dataviz-dark/${level}/${x}/${y}@2x.png?key=0AtPstDdcLrwq9kMIxnI`
+            ? `https://api.maptiler.com/maps/dataviz-dark/${level}/${x}/${y}.png?key=0AtPstDdcLrwq9kMIxnI`
             : // ? `https://api.maptiler.com/maps/basic-v2-dark/256/${level}/${x}/${y}.png?key=0AtPstDdcLrwq9kMIxnI`
               `https://mt0.google.com/vt/lyrs=p&hl=en&x=${x}&y=${y}&z=${level}`;
         }}
