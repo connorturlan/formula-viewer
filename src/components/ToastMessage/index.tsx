@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import { UseSub } from "../../utils/pubsub";
 
@@ -8,24 +8,27 @@ export interface ToastMessageEvent {
 
 export const ToastMessage = () => {
   const [messages, setMessages] = useState<string[]>([]);
-  const [oldestMessageIndex, setOldestMessage] =
-    useState(-1);
-  const [agingMessageIndex, setAgingMessage] = useState(-1);
+
+  const oldestMessageIndex = useRef(0);
+  const agingMessageIndex = useRef(0);
+  const allMessages = useRef<string[]>([]);
 
   const handleIncommingMessage = (message: string) => {
     console.log("new message: ", message);
-    const newMessages = messages.slice() as string[];
-
-    newMessages.push(message);
+    allMessages.current.push(message);
+    setMessages(allMessages.current.slice());
 
     setTimeout(() => {
-      setAgingMessage(agingMessageIndex + 1);
+      agingMessageIndex.current += 1;
     }, 3_000);
     setTimeout(() => {
-      setOldestMessage(oldestMessageIndex + 1);
+      oldestMessageIndex.current += 1;
+      setMessages(
+        allMessages.current.slice(
+          oldestMessageIndex.current
+        )
+      );
     }, 4_000);
-
-    setMessages(newMessages);
   };
 
   const handleInfoMessage = (event: any) => {
@@ -47,28 +50,39 @@ export const ToastMessage = () => {
     );
   }, [messages]);
 
-  // useEffect(() => {
-  //   handleIncommingMessage("test");
-  // }, []);
+  const ref = useRef(0);
+  const count = useRef(0);
+  useEffect(() => {
+    ref.current += 1;
+    if (ref.current > 1) return;
+    setInterval(() => {
+      count.current += 1;
+      if (count.current > 10) return;
+      handleIncommingMessage(
+        "test" + new Date().toISOString()
+      );
+    }, 1_000);
+  }, []);
 
   return (
     <div className={styles.Container}>
-      {messages
-        .slice(oldestMessageIndex)
-        .map((message, index) => {
-          return (
-            <p
-              key={message}
-              className={`${styles.Bubble} ${
-                index <= agingMessageIndex
-                  ? styles.BubbleHide
-                  : styles.BubbleShow
-              }`}
-            >
-              {message}
-            </p>
-          );
-        })}
+      {messages.map((message, index) => {
+        return (
+          <p
+            key={`${message}`}
+            className={`${styles.Bubble} ${
+              index <
+              allMessages.current.length -
+                agingMessageIndex.current -
+                1
+                ? styles.BubbleHide
+                : styles.BubbleShow
+            }`}
+          >
+            {message}
+          </p>
+        );
+      })}
     </div>
   );
 };

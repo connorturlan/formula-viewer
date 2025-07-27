@@ -4,16 +4,18 @@ import { usePub } from "../../utils/pubsub";
 import Tracks from "../WorldMap/tracks-array.json";
 
 export const TrackList = ({ children }: any) => {
-  const [showList, _setListVisibility] = useState(true);
+  const [showList, setListVisibility] = useState(true);
   const selectTrack = usePub();
   return (
     <div className={styles.Container}>
-      {showList && (
-        <div
-          className={styles.Sidebar}
-          // onClick={() => setListVisibility(false)}
+      <div className={styles.Sidebar}>
+        <button
+          onClick={() => setListVisibility(!showList)}
         >
-          {Tracks.tracks.map((track, index) => {
+          Toggle
+        </button>
+        {showList &&
+          Tracks.tracks.map((track, index) => {
             return (
               <h3
                 key={track.name}
@@ -29,8 +31,7 @@ export const TrackList = ({ children }: any) => {
               </h3>
             );
           })}
-        </div>
-      )}
+      </div>
       {children}
     </div>
   );
