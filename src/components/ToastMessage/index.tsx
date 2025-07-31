@@ -8,6 +8,8 @@ export interface ToastMessageEvent {
 
 export const ToastMessage = () => {
   const [messages, setMessages] = useState<string[]>([]);
+  const [oldestMessage, setOldest] = useState<number>(0);
+  const [agingMessage, setAging] = useState<number>(0);
 
   const oldestMessageIndex = useRef(0);
   const agingMessageIndex = useRef(0);

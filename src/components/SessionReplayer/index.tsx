@@ -181,7 +181,7 @@ export const SessionTimeKeeper = () => {
 
     const lastIndex = futureEvents.findIndex((event) => {
       return (
-        new Date(event.timestamp).getTime() > timePosition
+        new Date(event.timestamp).getTime() >= timePosition
       );
     });
     setLastEventIndex(lastEventIndex + lastIndex + 1);
