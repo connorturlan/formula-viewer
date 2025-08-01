@@ -24,6 +24,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  color: white;
 }
 
 .Toggle {
@@ -41,12 +43,16 @@
   align-items: center;
 
   transition: 0.2s;
+  background-color: #222a;
+
+  color: white;
 
   &Hide {
     opacity: 0.5;
   }
   &:hover {
     opacity: 1;
+    background-color: #222;
   }
 }
 
@@ -61,6 +67,8 @@
 
   overflow-y: auto;
   pointer-events: all;
+
+  color: white;
 
   &Toggle {
     position: relative;
@@ -108,6 +116,8 @@
     cursor: pointer;
     user-select: none;
     transition: 0.6s;
+
+    color: white;
 
     &:hover {
       background-color: #222;

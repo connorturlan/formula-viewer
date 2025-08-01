@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-import { WorldMap } from "./components/WorldMap";
+import { useEffect, useRef, useState } from "react";
 import { TrackList } from "./components/TrackList";
 import { MapContainer } from "./components/MapContainer/MapContainer";
 import { usePub, UseSub } from "./utils/pubsub";
@@ -25,7 +24,6 @@ import {
 import Text from "ol/style/Text";
 import styles from "./App.module.scss";
 import Layer from "ol/layer/Layer";
-import { createRoot } from "react-dom/client";
 import { composeCssTransform } from "ol/transform";
 
 const melbourne = [144.97, -37.8503];
@@ -157,7 +155,7 @@ function App() {
   });
 
   const trackSource = new VectorSource();
-  const trackLayer = new VectorLayer({
+  new VectorLayer({
     style: (feature) => {
       const track = feature as any;
       return new Style({

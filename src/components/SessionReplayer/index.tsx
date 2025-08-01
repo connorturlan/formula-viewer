@@ -372,14 +372,14 @@ export const DriverPositionReplayer = () => {
   >([]);
 
   const updatePositions = (event: PositionTimeFrame) => {
+    const gained: number[] = [];
+    const lost: number[] = [];
+
     const newPositions = driverPositions.slice();
     const positionMap = new Map<number, number>();
     driverPositions.forEach((driver, index) =>
       positionMap.set(driver, index)
     );
-
-    const gained: number[] = [];
-    const lost: number[] = [];
 
     Array.from(event.positions.entries()).forEach(
       ([driverNumber, position]: [number, number]) => {
@@ -405,6 +405,7 @@ export const DriverPositionReplayer = () => {
   });
 
   UseSub("ReplayerEventUpdate", (event: any) => {
+    console.log(event.events.length);
     event.events.forEach((event: any) => {
       if (event.positions) {
         updatePositions(event);
