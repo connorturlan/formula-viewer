@@ -1,4 +1,5 @@
 import {
+  GetSessionFromSessionKey,
   LoadLocationData,
   Position,
   type LocationData,
@@ -11,12 +12,17 @@ export interface EventTimeFrame {
 }
 
 async function collectDataChunk(
+  sessionKey: number,
   start: Date,
   end: Date
 ): Promise<LocationData[]> {
   const buffer = (end.getTime() - start.getTime()) / 1_000;
 
-  const [res, err] = await LoadLocationData(start, buffer);
+  const [res, err] = await LoadLocationData(
+    sessionKey,
+    start,
+    buffer
+  );
   if (err) {
     console.error("Error while fetching chunk.");
   }
@@ -24,11 +30,22 @@ async function collectDataChunk(
   return res;
 }
 
-export async function collectAllData(
-  start: Date,
-  end: Date,
+export async function collectAllLocationData(
+  sessionKey: number,
   timestep: number
 ): Promise<LocationData[]> {
+  const [sessionData, err] = await GetSessionFromSessionKey(
+    sessionKey
+  );
+  if (err) {
+    console.error(err.message);
+    return [];
+  }
+
+  const { date_start, date_end } = sessionData;
+  const start = new Date(date_start);
+  const end = new Date(date_end);
+
   const idate = new Date(start.getTime());
   const chunks: LocationData[] = [];
   const total =
@@ -47,7 +64,11 @@ export async function collectAllData(
       idate.getTime() + timestep * 1_000
     );
 
-    const res = await collectDataChunk(idate, jdate);
+    const res = await collectDataChunk(
+      sessionKey,
+      idate,
+      jdate
+    );
     chunks.push(...res);
     idate.setTime(jdate.getTime());
 
@@ -117,10 +138,10 @@ export type PositionTimeFrame = {
   positions: Map<number, number>;
 };
 
-export async function collectAllPositionData(): Promise<
-  Promise<PositionData[]>
-> {
-  const [res, err] = await Position(9693);
+export async function collectAllPositionData(
+  sessionKey: number
+): Promise<Promise<PositionData[]>> {
+  const [res, err] = await Position(sessionKey);
   if (err) {
     console.error("Error while fetching chunk.");
   }

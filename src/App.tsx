@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { WorldMap } from "./components/WorldMap";
 import { TrackList } from "./components/TrackList";
 import { MapContainer } from "./components/MapContainer/MapContainer";
@@ -22,6 +22,7 @@ import {
   SessionTimeKeeper,
 } from "./components/SessionReplayer";
 import Text from "ol/style/Text";
+import styles from "./App.module.scss";
 
 const melbourne = [144.97, -37.8503];
 // const spa = [5.971003, 50.4457];
@@ -30,6 +31,7 @@ const melbourne = [144.97, -37.8503];
 function App() {
   const publisher = usePub();
   const zLevel = useRef<number | undefined>(1);
+  const [mapOrigin, setMapOrigin] = useState(melbourne);
 
   const onMapMove = (_event: any, map: Map) => {
     const zoomLevel = map.getView().getZoom()!;
@@ -37,6 +39,7 @@ function App() {
     const coord = convertCoordToLatLon(
       map.getView().getCenter() as [number, number]
     );
+    setMapOrigin(coord);
     if (zoomLevel < 10) {
       publisher("toggle3DGlobe", {
         visible: true,
@@ -134,19 +137,20 @@ function App() {
         duringMove={onMapMove}
       />
       <WorldMap />
-      <TrackList>
+      <div className={styles.Container}>
         {/* <TrackReplayer
           origin={melbourne}
           driverLayer={locationLayer}
         /> */}
+        <TrackList />
         <SessionTimeKeeper />
         <DriverLocationReplayer
-          origin={melbourne}
+          origin={mapOrigin}
           driverLayer={locationLayer}
         />
         <ToastMessage />
         <DriverPositionReplayer />
-      </TrackList>
+      </div>
     </>
   );
 }

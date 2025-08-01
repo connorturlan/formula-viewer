@@ -27,7 +27,7 @@ const timePrecision = 1_000 / dataFrequency;
 const timeResolution =
   (end.getTime() - start.getTime()) / timePrecision;
 
-var timer: number;
+var timer: NodeJS.Timeout;
 const historyLength = Math.round(
   ((end.getTime() - start.getTime()) / 1_000) *
     dataFrequency
@@ -105,6 +105,7 @@ export const TrackReplayer = ({
 
     // get the new locations.
     const [res, err] = await LoadLocationData(
+      0,
       time,
       bufferSeconds
     );

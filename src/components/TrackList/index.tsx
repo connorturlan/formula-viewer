@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./TrackList.module.scss";
 import { usePub } from "../../utils/pubsub";
-import Tracks from "../WorldMap/tracks-array.json";
 import {
   Meetings,
   Sessions,
@@ -9,13 +8,16 @@ import {
   type SessionData,
 } from "../../services/OpenF1";
 
-export const TrackList = ({ children }: any) => {
+export const TrackList = () => {
   const publisher = usePub();
 
   const [showList, setListVisibility] = useState(true);
-  const [selectedMeeting, setSelectedMeeting] = useState<
-    number | undefined
-  >();
+  const [selectedMeeting, setSelectedMeeting] =
+    useState<number>(-1);
+  const [selectedMeetingIndex, setSelectedMeetingIndex] =
+    useState<number>(-1);
+  const [selectedSessionIndex, setSelectedSessionIndex] =
+    useState<number>(-1);
   const [meetingList, setMeetingList] = useState<
     MeetingData[]
   >([]);
@@ -52,24 +54,56 @@ export const TrackList = ({ children }: any) => {
           Toggle
         </button>
         {showList &&
-          Tracks.tracks.map((track, index) => {
+          meetingList.map((meeting, index) => {
             return (
               <h3
-                key={track.name}
-                className={styles.SidebarLabel}
+                key={meeting.meeting_key}
+                className={`${styles.SidebarLabel} ${
+                  index === selectedMeetingIndex &&
+                  styles.SidebarLabelSelected
+                }`}
                 onClick={() => {
-                  console.log(`selected: ${track.name}`);
+                  console.log(
+                    `selected: ${meeting.meeting_name}`
+                  );
                   publisher("onTrackSelect", {
                     trackIndex: index,
+                    trackName: meeting.location,
                   });
+                  setSelectedMeeting(meeting.meeting_key);
+                  setSelectedMeetingIndex(index);
                 }}
               >
-                {track.name}
+                {meeting.country_name}
               </h3>
             );
           })}
       </div>
-      {children}
+      <div className={styles.Sidebar}>
+        {showList &&
+          sessionList.map((meeting, index) => {
+            return (
+              <h3
+                key={meeting.session_key}
+                className={`${styles.SidebarLabel} ${
+                  index === selectedSessionIndex &&
+                  styles.SidebarLabelSelected
+                }`}
+                onClick={() => {
+                  console.log(
+                    `selected: ${meeting.session_name}`
+                  );
+                  publisher("LoadSession", {
+                    sessionKey: meeting.session_key,
+                  });
+                  setSelectedSessionIndex(index);
+                }}
+              >
+                {meeting.session_name}
+              </h3>
+            );
+          })}
+      </div>
     </div>
   );
 };

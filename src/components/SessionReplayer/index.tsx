@@ -11,7 +11,7 @@ import { PROJECTION } from "../../utils/defaults";
 import { Feature } from "ol";
 import { usePub, UseSub } from "../../utils/pubsub";
 import {
-  collectAllData,
+  collectAllLocationData,
   collectAllPositionData,
   convertDataIntoFrames,
   convertPositionDataIntoFrames,
@@ -33,8 +33,8 @@ import { DriverPositionList } from "../DriverPositionList";
 // const start = new Date("2023-09-16T13:00:00+00:00");
 // const end = new Date("2023-09-16T14:00:00+00:00");
 // aus 2025
-const start = new Date("2025-03-16T04:00:00+00:00");
-const end = new Date("2025-03-16T05:00:00+00:00");
+// const start = new Date("2025-03-16T04:00:00+00:00");
+// const end = new Date("2025-03-16T05:00:00+00:00");
 // const start = new Date("2025-03-16T04:00:00+00:00");
 // const end = new Date("2025-03-16T04:02:00+00:00");
 // const start = new Date("2025-03-16T04:18:06.734000+00:00");
@@ -43,16 +43,20 @@ const dataFrequency = 3.7;
 const framesPerSecond = 1 * dataFrequency;
 
 export const SessionTimeKeeper = () => {
+  const [start, setStart] = useState<number>(0);
+  const [end, setEnd] = useState<number>(0);
+
   const [timer, setTimer] = useState<NodeJS.Timeout>(
     {} as NodeJS.Timeout
   );
   const [timerEnabled, setTimerEnabled] = useState(false);
-  const [timeValue, setTimeValue] = useState(
-    start.getTime() / 1_000
-  );
-  const [timePosition, setTime] = useState(start.getTime());
+  const [timeValue, setTimeValue] = useState(start / 1_000);
+  const [timePosition, setTime] = useState(start);
   const [events, setEvents] = useState<any[]>([]);
   const [lastEventIndex, setLastEventIndex] = useState(0);
+
+  // 9693 is melbourne
+  const [sessionKey, setSessionKey] = useState<number>(0);
 
   const [loadingTotal, setLoadingTotal] = useState(-1);
   const [loadingValue, setLoadingValue] = useState(-1);
@@ -64,7 +68,7 @@ export const SessionTimeKeeper = () => {
     setTimeValue(Number(ev.target.value));
   };
 
-  const realtimeRef = useRef<number>(start.getTime());
+  const realtimeRef = useRef<number>(start);
   const toggleTimer = (enabled: boolean) => {
     setTimerEnabled(enabled);
     console.log(
@@ -102,58 +106,87 @@ export const SessionTimeKeeper = () => {
   //   }, seconds * 1_000);
   // };
 
+  const loadAll = async () => {
+    if (!sessionKey) return;
+
+    const newEvents = [] as any[];
+    publisher("ErrorMessage", {
+      message: `Loading session data...`,
+    });
+    const data = await collectAllLocationData(
+      sessionKey,
+      120
+    );
+    const frames = await convertDataIntoFrames(data);
+    newEvents.push(...frames);
+
+    const posData = await collectAllPositionData(
+      sessionKey
+    );
+    const posFrames = await convertPositionDataIntoFrames(
+      posData
+    );
+    newEvents.push(...posFrames);
+
+    const [drivers, err] = await Drivers(sessionKey);
+    if (err) {
+      publisher("ErrorMessage", {
+        message: `Unable to get driver data: ${err.message}. Please try again later.`,
+      });
+      console.error("unable to get driver data.", err);
+    }
+    const driverMap = new Map<number, DriverData>();
+    drivers.forEach((driver) => {
+      driverMap.set(driver.driver_number, driver);
+    });
+
+    newEvents.sort((a, b) => {
+      return (
+        new Date(a.timestamp).getTime() -
+        new Date(b.timestamp).getTime()
+      );
+    });
+    setEvents(newEvents);
+
+    publisher("InfoMessage", {
+      message: `Session loaded!`,
+    });
+    publisher("ErrorMessage", {
+      message: `Session loaded!`,
+    });
+    publisher("ReplayerDriverDataUpdate", {
+      data: driverMap,
+    });
+  };
+
+  useEffect(() => {
+    if (events.length <= 0) return;
+    const firstEvent = events.at(0)!;
+    const newStart = new Date(
+      firstEvent.timestamp
+    ).getTime();
+    setStart(newStart);
+    const lastEvent = events.at(-1)!;
+    setEnd(new Date(lastEvent.timestamp).getTime());
+
+    console.log(events, firstEvent, newStart);
+    setTimeValue(newStart);
+  }, [events]);
+
+  UseSub("LoadSession", (event: any) => {
+    setSessionKey(event.sessionKey);
+  });
+
+  useEffect(() => {
+    setEvents([]);
+    loadAll();
+  }, [sessionKey]);
+
   const prefire = useRef(0);
   useEffect(() => {
     prefire.current = prefire.current + 1;
     if (prefire.current > 1) return;
 
-    const loadAll = async () => {
-      const newEvents = events.slice();
-      publisher("ErrorMessage", {
-        message: `Loading session data...`,
-      });
-      const data = await collectAllData(start, end, 120);
-      const frames = await convertDataIntoFrames(data);
-      newEvents.push(...frames);
-
-      const posData = await collectAllPositionData();
-      const posFrames = await convertPositionDataIntoFrames(
-        posData
-      );
-      newEvents.push(...posFrames);
-
-      const [drivers, err] = await Drivers(9693);
-      if (err) {
-        publisher("ErrorMessage", {
-          message: `Unable to get driver data: ${err.message}. Please try again later.`,
-        });
-        console.error("unable to get driver data.", err);
-      }
-      const driverMap = new Map<number, DriverData>();
-      drivers.forEach((driver) => {
-        driverMap.set(driver.driver_number, driver);
-      });
-
-      newEvents.sort((a, b) => {
-        return (
-          new Date(a.timestamp).getTime() -
-          new Date(b.timestamp).getTime()
-        );
-      });
-      setEvents(newEvents);
-
-      setTimeValue(start.getTime() / 1_000 + 1);
-
-      publisher("InfoMessage", {
-        message: `Session loaded!`,
-      });
-      publisher("ErrorMessage", {
-        message: `Session loaded!`,
-      });
-      publisher("ReplayerDriverDataUpdate", {
-        data: driverMap,
-      });
-    };
     loadAll();
   }, []);
 
@@ -225,8 +258,8 @@ export const SessionTimeKeeper = () => {
         <input
           className={styles.Input}
           type="range"
-          min={start.getTime() / 1_000}
-          max={end.getTime() / 1_000}
+          min={start / 1_000}
+          max={end / 1_000}
           value={timeValue}
           onChange={handleChange}
         />
@@ -316,36 +349,47 @@ export const DriverLocationReplayer = ({
 };
 
 export const DriverPositionReplayer = () => {
-  const [lastPositionEvent, setLastEvent] = useState<
-    PositionTimeFrame | undefined
-  >(undefined);
   const [driverData, setDriverData] = useState<
     Map<number, DriverData>
   >(new Map<number, DriverData>());
   const [driverPositions, setDriverPositions] = useState<
     number[]
   >([]);
+  const [positionsGained, setPositionsGained] = useState<
+    number[]
+  >([]);
+  const [positionsLost, setPositionsLost] = useState<
+    number[]
+  >([]);
 
-  const updatePositions = () => {
-    if (!lastPositionEvent) return;
-
+  const updatePositions = (event: PositionTimeFrame) => {
     const newPositions = driverPositions.slice();
+    const positions = new Map<number, number>();
+    driverPositions.forEach((driver, index) =>
+      positions.set(driver, index)
+    );
 
-    Array.from(
-      lastPositionEvent!.positions.entries()
-    ).forEach(([driverNumber, position]) => {
-      while (newPositions.length < position) {
-        newPositions.push(-1);
+    const gained: number[] = [];
+    const lost: number[] = [];
+
+    Array.from(event.positions.entries()).forEach(
+      ([driverNumber, position]: [number, number]) => {
+        while (newPositions.length < position) {
+          newPositions.push(-1);
+        }
+        newPositions[position - 1] = driverNumber;
+
+        if (position - 1 < positions.get(driverNumber)!)
+          gained.push(driverNumber);
+        if (position - 1 > positions.get(driverNumber)!)
+          lost.push(driverNumber);
       }
-      newPositions[position - 1] = driverNumber;
-    });
+    );
 
     setDriverPositions(newPositions);
+    setPositionsGained(gained);
+    setPositionsLost(lost);
   };
-
-  useEffect(() => {
-    updatePositions();
-  }, [lastPositionEvent]);
 
   UseSub("ReplayerDriverDataUpdate", (event: any) => {
     setDriverData(event.data as Map<number, DriverData>);
@@ -354,7 +398,7 @@ export const DriverPositionReplayer = () => {
   UseSub("ReplayerEventUpdate", (event: any) => {
     event.events.forEach((event: any) => {
       if (event.positions) {
-        setLastEvent(event as PositionTimeFrame);
+        updatePositions(event);
       }
     });
   });
@@ -363,6 +407,27 @@ export const DriverPositionReplayer = () => {
     <DriverPositionList
       driverData={driverData}
       positions={driverPositions}
+      positionsGained={positionsGained}
+      positionsLost={positionsLost}
     />
   );
 };
+
+// export const RaceControlReplayer = () => {
+//   const [driverData, setDriverData] = useState<
+//     Map<number, DriverData>
+//   >(new Map<number, DriverData>());
+
+//   UseSub("ReplayerDriverDataUpdate", (event: any) => {
+//     setDriverData(event.data as Map<number, DriverData>);
+//   });
+
+//   UseSub("ReplayerEventUpdate", (event: any) => {
+//     event.events.forEach((event: any) => {
+//       if (event.positions) {
+//       }
+//     });
+//   });
+
+//   return <></>;
+// };

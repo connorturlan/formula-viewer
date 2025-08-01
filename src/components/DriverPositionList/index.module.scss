@@ -34,11 +34,18 @@
     font-weight: bolder;
 
     animation-duration: 2s;
-    animation-name: position-change;
+    // animation-name: position-change;
 
     & * {
       margin: 0;
       padding: 0;
+    }
+
+    &Gained {
+      animation-name: position-gained;
+    }
+    &Lost {
+      animation-name: position-lost;
     }
   }
 }
@@ -46,6 +53,24 @@
 @keyframes position-change {
   from {
     outline: 2px solid #ffa500;
+  }
+  to {
+    outline: 2px solid #ffa50000;
+  }
+}
+
+@keyframes position-gained {
+  from {
+    outline: 2px solid green;
+  }
+  to {
+    outline: 2px solid #ffa50000;
+  }
+}
+
+@keyframes position-lost {
+  from {
+    outline: 2px solid red;
   }
   to {
     outline: 2px solid #ffa50000;

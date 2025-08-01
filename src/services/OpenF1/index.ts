@@ -1,4 +1,3 @@
-import { string } from "three/tsl";
 import type { ApiError } from "./types";
 
 const baseUrl = "api.openf1.org";
@@ -179,6 +178,7 @@ export type LocationData = {
 };
 
 export async function LoadLocationData(
+  sessionKey: number,
   start: Date,
   secondsBuffer: number
 ): Promise<[LocationData[], ApiError | null]> {
@@ -199,7 +199,7 @@ export async function LoadLocationData(
   // );
   // aus 2025
   const res = await HandleRequest(
-    `location?session_key=9693&date>${start.toISOString()}&date<${timeBuffer.toISOString()}`
+    `location?session_key=${sessionKey}&date>${start.toISOString()}&date<${timeBuffer.toISOString()}`
   );
 
   if (res.status === 401) {
@@ -268,7 +268,7 @@ export type MeetingData = {
   date_start: string;
   gmt_offset: string;
   location: string;
-  meeting_key: string;
+  meeting_key: number;
   meeting_name: string;
   meeting_official_name: string;
   year: number;
@@ -390,6 +390,37 @@ export async function Sessions(
   const json = await res.json();
 
   return [json, null];
+}
+
+export async function GetSessionFromSessionKey(
+  sessionKey: number
+): Promise<[SessionData, ApiError | null]> {
+  // https://api.openf1.org/v1/sessions?country_name=Belgium&session_name=Sprint&year=2023
+  const res = await HandleRequest(
+    `sessions?session_key=${sessionKey}`
+  );
+
+  if (res.status !== 200) {
+    return [
+      {} as SessionData,
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
+  const json = await res.json();
+
+  const sessions = json as SessionData[];
+
+  if (sessions.length != 1)
+    console.error(
+      "expected one sessions and got ",
+      sessions.length
+    );
+
+  return [sessions.at(0)!, null];
 }
 
 export type SessionData = {
