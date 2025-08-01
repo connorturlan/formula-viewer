@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { WorldMap } from "./components/WorldMap";
 import { TrackList } from "./components/TrackList";
 import { MapContainer } from "./components/MapContainer/MapContainer";
-import { usePub } from "./utils/pubsub";
+import { usePub, UseSub } from "./utils/pubsub";
 import { convertCoordToLatLon } from "./utils/utils";
 import Style from "ol/style/Style";
 import VectorLayer from "ol/layer/Vector";
@@ -31,7 +31,8 @@ const melbourne = [144.97, -37.8503];
 function App() {
   const publisher = usePub();
   const zLevel = useRef<number | undefined>(1);
-  const [mapOrigin, setMapOrigin] = useState(melbourne);
+  const [mapOrigin, setMapOrigin] =
+    useState<number[]>(melbourne);
 
   const onMapMove = (_event: any, map: Map) => {
     const zoomLevel = map.getView().getZoom()!;
@@ -39,7 +40,7 @@ function App() {
     const coord = convertCoordToLatLon(
       map.getView().getCenter() as [number, number]
     );
-    setMapOrigin(coord);
+    // setMapOrigin(coord);
     if (zoomLevel < 10) {
       publisher("toggle3DGlobe", {
         visible: true,
@@ -49,6 +50,16 @@ function App() {
       });
     }
   };
+
+  UseSub("LoadTrack", (event: any) => {
+    const { trackName } = event;
+    const track = trackArray.tracks.find(
+      (item) => item.name === trackName
+    );
+    if (!track) return;
+
+    setMapOrigin([track.lng, track.lat]);
+  });
 
   const trackSource = new VectorSource();
   const trackLayer = new VectorLayer({
@@ -130,7 +141,7 @@ function App() {
     <>
       <MapContainer
         layers={[trackLayer, locationLayer]}
-        mapCenter={melbourne}
+        mapCenter={mapOrigin}
         onClick={undefined}
         onInit={undefined}
         onMove={onMapMove}
@@ -138,17 +149,13 @@ function App() {
       />
       <WorldMap />
       <div className={styles.Container}>
-        {/* <TrackReplayer
-          origin={melbourne}
-          driverLayer={locationLayer}
-        /> */}
+        <ToastMessage />
         <TrackList />
         <SessionTimeKeeper />
         <DriverLocationReplayer
           origin={mapOrigin}
           driverLayer={locationLayer}
         />
-        <ToastMessage />
         <DriverPositionReplayer />
       </div>
     </>

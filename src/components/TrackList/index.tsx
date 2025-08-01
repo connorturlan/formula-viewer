@@ -47,63 +47,84 @@ export const TrackList = () => {
 
   return (
     <div className={styles.Container}>
-      <div className={styles.Sidebar}>
-        <button
-          onClick={() => setListVisibility(!showList)}
-        >
-          Toggle
-        </button>
-        {showList &&
-          meetingList.map((meeting, index) => {
-            return (
-              <h3
-                key={meeting.meeting_key}
-                className={`${styles.SidebarLabel} ${
-                  index === selectedMeetingIndex &&
-                  styles.SidebarLabelSelected
-                }`}
-                onClick={() => {
-                  console.log(
-                    `selected: ${meeting.meeting_name}`
-                  );
-                  publisher("onTrackSelect", {
-                    trackIndex: index,
-                    trackName: meeting.location,
-                  });
-                  setSelectedMeeting(meeting.meeting_key);
-                  setSelectedMeetingIndex(index);
-                }}
-              >
-                {meeting.country_name}
-              </h3>
-            );
-          })}
-      </div>
-      <div className={styles.Sidebar}>
-        {showList &&
-          sessionList.map((meeting, index) => {
-            return (
-              <h3
-                key={meeting.session_key}
-                className={`${styles.SidebarLabel} ${
-                  index === selectedSessionIndex &&
-                  styles.SidebarLabelSelected
-                }`}
-                onClick={() => {
-                  console.log(
-                    `selected: ${meeting.session_name}`
-                  );
-                  publisher("LoadSession", {
-                    sessionKey: meeting.session_key,
-                  });
-                  setSelectedSessionIndex(index);
-                }}
-              >
-                {meeting.session_name}
-              </h3>
-            );
-          })}
-      </div>
+      <button
+        className={`${styles.Toggle} ${
+          !showList && styles.ToggleHide
+        }`}
+        onClick={() => setListVisibility(!showList)}
+      >
+        TRK
+      </button>
+      {showList && (
+        <div className={styles.Modal}>
+          <button
+            className={`${styles.ModalToggle} ${
+              !showList && styles.ModalToggleHide
+            }`}
+            onClick={() => setListVisibility(!showList)}
+          >
+            ⨉
+          </button>
+          <div className={styles.ModalList}>
+            {meetingList.map((meeting, index) => {
+              return (
+                <button
+                  key={meeting.meeting_key}
+                  className={`${styles.ModalItem} ${
+                    index === selectedMeetingIndex &&
+                    styles.ModalItemSelected
+                  }`}
+                  onClick={() => {
+                    console.log(
+                      `selected: ${meeting.meeting_name}`
+                    );
+                    publisher("onTrackSelect", {
+                      trackIndex: index,
+                      trackName: meeting.location,
+                    });
+                    publisher("LoadTrack", {
+                      trackIndex: index,
+                      trackName: meeting.location,
+                    });
+                    setSelectedMeeting(meeting.meeting_key);
+                    setSelectedMeetingIndex(index);
+                    setSelectedSessionIndex(-1);
+                  }}
+                >
+                  {meeting.country_name}
+                </button>
+              );
+            })}
+          </div>
+          <div className={styles.ModalCluster}>
+            {sessionList.map((meeting, index) => {
+              return (
+                <button
+                  key={meeting.session_key}
+                  className={`${styles.ModalItem} ${
+                    index === selectedSessionIndex &&
+                    styles.ModalItemSelected
+                  }`}
+                  onClick={() => {
+                    console.log(
+                      `selected: ${meeting.session_name}`
+                    );
+                    publisher("LoadSession", {
+                      sessionKey: meeting.session_key,
+                    });
+                    publisher("InfoMessage", {
+                      message: `Loading session ${meeting.session_name}`,
+                    });
+                    setSelectedSessionIndex(index);
+                  }}
+                >
+                  {meeting.session_name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -110,7 +110,7 @@ export const SessionTimeKeeper = () => {
     if (!sessionKey) return;
 
     const newEvents = [] as any[];
-    publisher("ErrorMessage", {
+    publisher("InfoMessage", {
       message: `Loading session data...`,
     });
     const data = await collectAllLocationData(
@@ -244,14 +244,19 @@ export const SessionTimeKeeper = () => {
     <div className={styles.Container}>
       <div className={styles.ContainerSection}>
         {loadingValue < loadingTotal && (
-          <input
-            className={`${styles.Input} ${styles.InputLoader}`}
-            type="range"
-            min={0}
-            max={loadingTotal}
-            value={loadingValue}
-            readOnly
-          />
+          <>
+            <input
+              className={`${styles.Input} ${styles.InputLoader}`}
+              type="range"
+              min={0}
+              max={loadingTotal}
+              value={loadingValue}
+              readOnly
+            />
+            <span
+              className={`${styles.InputLoaderSpinner} ${styles.InputLoaderFlag}`}
+            ></span>
+          </>
         )}
       </div>
       <div className={styles.ContainerSection}>
@@ -263,13 +268,13 @@ export const SessionTimeKeeper = () => {
           value={timeValue}
           onChange={handleChange}
         />
-        <input
-          type="button"
-          value={timerEnabled ? "PAUSE" : "PLAY"}
+        <button
           onClick={() => {
             toggleTimer(!timerEnabled);
           }}
-        />
+        >
+          {timerEnabled ? "⏸" : "⏵"}
+        </button>
         <p>{new Date(timePosition).toISOString()}</p>
       </div>
     </div>
@@ -364,9 +369,9 @@ export const DriverPositionReplayer = () => {
 
   const updatePositions = (event: PositionTimeFrame) => {
     const newPositions = driverPositions.slice();
-    const positions = new Map<number, number>();
+    const positionMap = new Map<number, number>();
     driverPositions.forEach((driver, index) =>
-      positions.set(driver, index)
+      positionMap.set(driver, index)
     );
 
     const gained: number[] = [];
@@ -379,9 +384,9 @@ export const DriverPositionReplayer = () => {
         }
         newPositions[position - 1] = driverNumber;
 
-        if (position - 1 < positions.get(driverNumber)!)
+        if (position - 1 < positionMap.get(driverNumber)!)
           gained.push(driverNumber);
-        if (position - 1 > positions.get(driverNumber)!)
+        if (position - 1 > positionMap.get(driverNumber)!)
           lost.push(driverNumber);
       }
     );

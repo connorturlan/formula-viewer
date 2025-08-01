@@ -14,7 +14,11 @@
       "lng": 144.97,
       "lat": -37.8503,
       "model": "models/sectors/melbourne.stl",
-      "image": "svg/australia.svg"
+      "image": "svg/australia.svg",
+      "translateX": 0,
+      "translateY": 0,
+      "scaleX": 0,
+      "scaleY": 0
     },
     {
       "name": "Shanghai",
