@@ -6,56 +6,76 @@
   position: absolute;
   top: 0;
   right: 0;
+  gap: 1em;
 
   border-radius: 0 0 0 1em;
 
   height: fit-content;
   width: fit-content;
-  padding: 0;
+  padding: 1em 0 1em 1em;
 
   pointer-events: none;
 
   overflow-y: auto;
+  overflow-x: hidden;
 
-  height: 100vh;
+  height: fit-content;
+  max-height: 100vh;
 }
 
 .Bubble {
-  background: white;
-  color: black;
+  background: #222;
+  color: #eee;
 
   height: fit-content;
   min-width: 200px;
   width: 20em;
   padding: 1em;
+  margin: 0;
+  border-radius: 1em 0 0 1em;
   pointer-events: all;
+  position: relative;
 
   &Show {
     animation-duration: 1s;
     animation-name: slide-in;
   }
   &Hide {
-    // animation-duration: 1s;
-    // animation-name: slide-out;
-    // pointer-events: none;
-    // opacity: 0;
+    animation-duration: 1s;
+    animation-name: slide-out;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  &Info {
+    outline: 2px solid green;
+  }
+  &Warn {
+    outline: 2px solid yellow;
+  }
+  &Error {
+    outline: 2px solid red;
   }
 }
 
 @keyframes slide-in {
   from {
     opacity: 0;
+    right: -100%;
   }
   to {
     opacity: 1;
+    right: 0;
   }
 }
 
 @keyframes slide-out {
   from {
     opacity: 1;
+    right: 0;
   }
   to {
     opacity: 0;
+    right: -100%;
   }
 }
