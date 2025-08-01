@@ -1,3 +1,4 @@
+import { string } from "three/tsl";
 import type { ApiError } from "./types";
 
 const baseUrl = "api.openf1.org";
@@ -96,7 +97,7 @@ export async function Drivers(
   return [json, null];
 }
 
-export interface DriverData {
+export type DriverData = {
   broadcast_name: string;
   country_code: string;
   driver_number: number;
@@ -109,7 +110,7 @@ export interface DriverData {
   session_key: number;
   team_colour: string;
   team_name: string;
-}
+};
 
 /* 
 Fetches real-time interval data between drivers and their gap to the race leader. Available during races only, with updates approximately every 4 seconds.
@@ -165,7 +166,7 @@ export async function Location() {
   // "date_start":"2023-09-16T13:00:00+00:00","date_end":"2023-09-16T14:00:00+00:00"
 }
 
-export interface LocationData {
+export type LocationData = {
   date: Date;
   driver_number: number;
   meeting_key: number;
@@ -175,7 +176,7 @@ export interface LocationData {
   z: number;
 
   index?: number;
-}
+};
 
 export async function LoadLocationData(
   start: Date,
@@ -237,9 +238,41 @@ meeting_name 	The name of the meeting.
 meeting_official_name 	The official name of the meeting.
 year 	The year the event takes place.
 */
-export async function Meetings() {
+export async function Meetings(
+  year: number
+): Promise<[MeetingData[], ApiError | null]> {
   // https://api.openf1.org/v1/meetings?year=2023&country_name=Singapore
+  const res = await HandleRequest(`meetings?year=${year}`);
+
+  if (res.status !== 200) {
+    return [
+      [],
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
+  const json = await res.json();
+
+  return [json, null];
 }
+
+export type MeetingData = {
+  circuit_key: number;
+  circuit_short_name: number;
+  country_code: string;
+  country_key: number;
+  country_name: string;
+  date_start: string;
+  gmt_offset: string;
+  location: string;
+  meeting_key: string;
+  meeting_name: string;
+  meeting_official_name: string;
+  year: number;
+};
 
 /* 
 Provides information about cars going through the pit lane.
@@ -336,9 +369,45 @@ session_name 	The name of the session (Practice 1, Qualifying, Race, ...).
 session_type 	The type of the session (Practice, Qualifying, Race, ...).
 year 	The year the event takes place.
 */
-export async function Sessions() {
+export async function Sessions(
+  meetingKey: number
+): Promise<[SessionData[], ApiError | null]> {
   // https://api.openf1.org/v1/sessions?country_name=Belgium&session_name=Sprint&year=2023
+  const res = await HandleRequest(
+    `sessions?meeting_key=${meetingKey}`
+  );
+
+  if (res.status !== 200) {
+    return [
+      [],
+      {
+        status: res.status,
+        message: res.statusText,
+      },
+    ];
+  }
+
+  const json = await res.json();
+
+  return [json, null];
 }
+
+export type SessionData = {
+  circuit_key: number;
+  circuit_short_name: string;
+  country_code: string;
+  country_key: number;
+  country_name: string;
+  date_end: string;
+  date_start: string;
+  gmt_offset: string;
+  location: string;
+  meeting_key: number;
+  session_key: number;
+  session_name: string;
+  session_type: string;
+  year: number;
+};
 
 /* 
 Provides information about individual stints. A stint refers to a period of continuous driving by a driver during a session.

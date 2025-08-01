@@ -43,7 +43,9 @@ const dataFrequency = 3.7;
 const framesPerSecond = 1 * dataFrequency;
 
 export const SessionTimeKeeper = () => {
-  const [timer, setTimer] = useState<number>(-1);
+  const [timer, setTimer] = useState<NodeJS.Timeout>(
+    {} as NodeJS.Timeout
+  );
   const [timerEnabled, setTimerEnabled] = useState(false);
   const [timeValue, setTimeValue] = useState(
     start.getTime() / 1_000
@@ -107,7 +109,7 @@ export const SessionTimeKeeper = () => {
 
     const loadAll = async () => {
       const newEvents = events.slice();
-      publisher("InfoMessage", {
+      publisher("ErrorMessage", {
         message: `Loading session data...`,
       });
       const data = await collectAllData(start, end, 120);
@@ -143,6 +145,9 @@ export const SessionTimeKeeper = () => {
       setTimeValue(start.getTime() / 1_000 + 1);
 
       publisher("InfoMessage", {
+        message: `Session loaded!`,
+      });
+      publisher("ErrorMessage", {
         message: `Session loaded!`,
       });
       publisher("ReplayerDriverDataUpdate", {

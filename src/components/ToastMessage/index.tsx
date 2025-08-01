@@ -48,18 +48,8 @@ export const ToastMessage = () => {
     );
   }, [allMessages.current]);
 
-  const ref = useRef(0);
-  const count = useRef(0);
   useEffect(() => {
-    ref.current += 1;
-    if (ref.current > 1) return;
-    setInterval(() => {
-      count.current += 1;
-      // if (count.current > 10) return;
-      handleIncommingMessage(
-        "test" + new Date().toISOString()
-      );
-    }, 1_000);
+    handleIncommingMessage("notifications ready");
   }, []);
 
   return (

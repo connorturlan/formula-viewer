@@ -1,11 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./TrackList.module.scss";
 import { usePub } from "../../utils/pubsub";
 import Tracks from "../WorldMap/tracks-array.json";
+import {
+  Meetings,
+  Sessions,
+  type MeetingData,
+  type SessionData,
+} from "../../services/OpenF1";
 
 export const TrackList = ({ children }: any) => {
+  const publisher = usePub();
+
   const [showList, setListVisibility] = useState(true);
-  const selectTrack = usePub();
+  const [selectedMeeting, setSelectedMeeting] = useState<
+    number | undefined
+  >();
+  const [meetingList, setMeetingList] = useState<
+    MeetingData[]
+  >([]);
+  const [sessionList, setSessionList] = useState<
+    SessionData[]
+  >([]);
+
+  const loadMeetingData = async () => {
+    const [data, err] = await Meetings(2025);
+    if (err) console.log(`error: ${err.message}`);
+    setMeetingList(data);
+  };
+
+  const loadSessionData = async () => {
+    const [data, err] = await Sessions(selectedMeeting!);
+    if (err) console.log(`error: ${err.message}`);
+    setSessionList(data);
+  };
+
+  useEffect(() => {
+    loadSessionData();
+  }, [selectedMeeting]);
+
+  useEffect(() => {
+    loadMeetingData();
+  }, []);
+
   return (
     <div className={styles.Container}>
       <div className={styles.Sidebar}>
@@ -22,7 +59,7 @@ export const TrackList = ({ children }: any) => {
                 className={styles.SidebarLabel}
                 onClick={() => {
                   console.log(`selected: ${track.name}`);
-                  selectTrack("onTrackSelect", {
+                  publisher("onTrackSelect", {
                     trackIndex: index,
                   });
                 }}
