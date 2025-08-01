@@ -87,6 +87,7 @@ export const TrackList = () => {
                       trackName: meeting.location,
                     });
                     setSelectedMeeting(meeting.meeting_key);
+                    setSessionList([]);
                     setSelectedMeetingIndex(index);
                     setSelectedSessionIndex(-1);
                   }}

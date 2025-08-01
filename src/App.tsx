@@ -81,11 +81,10 @@ function App() {
 
   // const trackSource = new VectorSource();
   const svgContainer = document.createElement("div");
-  const svgRoot = createRoot(svgContainer).render(
-    <>
-      <img src="svg/australia.svg" />
-    </>
-  );
+  const svgImage = document.createElement("img");
+  svgImage.src = "svg/australia.svg";
+  svgContainer.appendChild(svgImage);
+
   let width = scaleX;
   let height = scaleY;
   let svgResolution = scaleR;
