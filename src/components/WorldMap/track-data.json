@@ -25,10 +25,17 @@
   {
     "name": "Shanghai",
     "gpName": "Chinese Grand Prix",
-    "lng": 121.1311,
-    "lat": 31.202,
+    "lng": 121.219722,
+    "lat": 31.338889,
     "model": "models/shanghai-international-circuit-shanghai-china-5xs.stl",
-    "image": "svg/china.svg"
+    "image": "svg/china.svg",
+    "width": 75,
+    "height": 130,
+    "resolution": 15.2,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Suzuka",
@@ -36,23 +43,44 @@
     "lng": 136.5417,
     "lat": 34.8425,
     "model": "models/suzuka-circuit-suzuka-japan-5xsup.stl",
-    "image": "svg/japan.svg"
+    "image": "svg/japan.svg",
+    "width": 176,
+    "height": 111,
+    "resolution": 26.2,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Sakhir",
     "gpName": "Bahrain Grand Prix",
-    "lng": 50.3038,
-    "lat": 26.157,
+    "lng": 50.510556,
+    "lat": 26.0325,
     "model": "models/bahrain-international-circuit-sakhir-bahrain-5xsu.stl",
-    "image": "svg/hungary.svg"
+    "image": "svg/bahrain.svg",
+    "width": 40,
+    "height": 82,
+    "resolution": 13.8,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Jeddah",
     "gpName": "Saudi Arabian Grand Prix",
-    "lng": 39.0616,
-    "lat": 21.3755,
+    "lng": 39.104444,
+    "lat": 21.631944,
     "model": "",
-    "image": "svg/saudi_arabia.svg"
+    "image": "svg/saudi_arabia.svg",
+    "width": 105,
+    "height": 143,
+    "resolution": 32.4,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Miami",
@@ -60,15 +88,29 @@
     "lng": -80.238889,
     "lat": 25.958056,
     "model": "",
-    "image": "svg/miami.svg"
+    "image": "svg/miami.svg",
+    "width": 78,
+    "height": 98,
+    "resolution": 17.4,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Imola",
     "gpName": "Emilia Romagna Grand Prix",
-    "lng": 11.4248,
-    "lat": 44.2028,
+    "lng": 11.713333,
+    "lat": 44.341111,
     "model": "",
-    "image": "svg/imola.svg"
+    "image": "svg/imola.svg",
+    "width": 97,
+    "height": 97,
+    "resolution": 27.7,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Monte Carlo",
@@ -76,15 +118,29 @@
     "lng": 7.4217,
     "lat": 43.7342,
     "model": "",
-    "image": "svg/monaco.svg"
+    "image": "svg/monaco.svg",
+    "width": 34,
+    "height": 156,
+    "resolution": 14,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Catalunya",
     "gpName": "Spanish Grand Prix",
-    "lng": -2.2579,
-    "lat": 41.5697,
+    "lng": 2.261111,
+    "lat": 41.57,
     "model": "models/circuit-de-barcelona-catalunya-montmelo-spain-5xs.stl",
-    "image": "svg/spain.svg"
+    "image": "svg/spain.svg",
+    "width": 144,
+    "height": 91,
+    "resolution": 16.4,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Montreal",
@@ -92,7 +148,14 @@
     "lng": -73.5226,
     "lat": 45.5014,
     "model": "models/circuit-gilles-villeneuve-montreal-canada-5xsup.stl",
-    "image": "svg/canada.svg"
+    "image": "svg/canada.svg",
+    "width": 125,
+    "height": 146,
+    "resolution": 29.6,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Spielberg",
@@ -100,7 +163,14 @@
     "lng": 14.7651,
     "lat": 47.2197,
     "model": "models/red-bull-ring-spielberg-bei-knittelfeld-austria-5.stl",
-    "image": "svg/austria.svg"
+    "image": "svg/austria.svg",
+    "width": 131,
+    "height": 151,
+    "resolution": 19.7,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Silverstone",
@@ -108,7 +178,14 @@
     "lng": -1.02303,
     "lat": 52.0681,
     "model": "models/silverstone-circuit-silverstone-united-kingdom-5x.stl",
-    "image": "svg/silverstone.svg"
+    "image": "svg/silverstone.svg",
+    "width": 53,
+    "height": 140,
+    "resolution": 29.6,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   },
   {
     "name": "Spa-Francorchamps",
@@ -116,6 +193,13 @@
     "lng": 5.971003,
     "lat": 50.4457,
     "model": "models/hungaroring-mogyorod-hungary-5xsup.stl",
-    "image": "svg/spa.svg"
+    "image": "svg/spa.svg",
+    "width": 112,
+    "height": 9,
+    "resolution": 34.1,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
   }
 ]

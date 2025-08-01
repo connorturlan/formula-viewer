@@ -122,6 +122,7 @@
   &Cluster {
     display: flex;
     gap: 1px;
+    overflow-y: auto;
   }
   &List {
     flex-direction: column;

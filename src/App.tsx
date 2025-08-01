@@ -73,49 +73,86 @@ function App() {
   const [scaleR, setR] = useState(23.8);
 
   useEffect(() => {
-    console.log(scaleX, scaleY, scaleR);
-    width = scaleX;
-    height = scaleY;
-    svgResolution = scaleR;
+    console.log(scaleX, scaleY, scaleR.toFixed(1));
   }, [scaleX, scaleY, scaleR]);
 
   // const trackSource = new VectorSource();
-  const svgContainer = document.createElement("div");
-  const svgImage = document.createElement("img");
-  svgImage.src = "svg/australia.svg";
-  svgContainer.appendChild(svgImage);
+  const svgGroup = document.createElement("div");
 
-  let width = scaleX;
-  let height = scaleY;
-  let svgResolution = scaleR;
-  svgContainer.style.width = width + "px";
-  svgContainer.style.height = height + "px";
-  svgContainer.style.transformOrigin = "top left";
-  svgContainer.className = "svg-layer";
-  svgContainer.style.position = "absolute";
-  svgContainer.style.userSelect = "none";
+  // const track = trackData.find(
+  //   (track) => track.name === "Melbourne"
+  // );
+
+  trackData.forEach((track) => {
+    const svgContainer = document.createElement("div");
+    svgGroup.appendChild(svgContainer);
+    const svgImage = document.createElement("img");
+    svgImage.src = track!.image;
+    svgContainer.appendChild(svgImage);
+
+    let width = scaleX || track!.width || 96;
+    let height = scaleY || track!.height || 152;
+    let svgResolution = scaleR || track!.resolution || 23.8;
+    svgContainer.setAttribute("width", String(width));
+    svgContainer.setAttribute("height", String(height));
+    svgContainer.setAttribute(
+      "resolution",
+      String(svgResolution)
+    );
+    svgContainer.setAttribute(
+      "lng",
+      String(track?.lng || 0)
+    );
+    svgContainer.setAttribute(
+      "lat",
+      String(track?.lat || 0)
+    );
+    svgContainer.style.width = width + "px";
+    svgContainer.style.height = height + "px";
+    svgContainer.style.transformOrigin = "top left";
+    svgContainer.className = "svg-layer";
+    svgContainer.style.position = "absolute";
+    svgContainer.style.userSelect = "none";
+  });
 
   const svgLayerRef = useRef<Layer>(new Layer({}));
   svgLayerRef.current = new Layer({
     // const svgLayer = new Layer({
     render: (frameState) => {
-      const scale =
-        svgResolution / frameState.viewState.resolution;
-      const center = frameState.viewState.center;
-      const size = frameState.size;
-      const coord = fromLonLat(melbourne);
-      const cssTransform = composeCssTransform(
-        size[0] / 2,
-        size[1] / 2,
-        scale,
-        scale,
-        frameState.viewState.rotation,
-        -(center[0] - coord[0]) / svgResolution - width / 2,
-        (center[1] - coord[1]) / svgResolution - height / 2
-      );
-      svgContainer.style.transform = cssTransform;
-      // svgContainer.style.opacity = String(0.5);
-      return svgContainer;
+      Array.from(svgGroup.children).forEach((container) => {
+        const lng = Number(container.getAttribute("lng"));
+        const lat = Number(container.getAttribute("lat"));
+        const trackCoord = [lng, lat];
+
+        const width = Number(
+          container.getAttribute("width")
+        );
+        const height = Number(
+          container.getAttribute("height")
+        );
+        const resolution = Number(
+          container.getAttribute("resolution")
+        );
+        const scale =
+          resolution / frameState.viewState.resolution;
+        const center = frameState.viewState.center;
+        const size = frameState.size;
+        const coord = fromLonLat(trackCoord);
+        const cssTransform = composeCssTransform(
+          size[0] / 2,
+          size[1] / 2,
+          scale,
+          scale,
+          frameState.viewState.rotation,
+          -(center[0] - coord[0]) / resolution - width / 2,
+          (center[1] - coord[1]) / resolution - height / 2
+        );
+        (container as HTMLDivElement).style.transform =
+          cssTransform;
+        (container as HTMLDivElement).style.opacity =
+          String(0.5);
+      });
+      return svgGroup;
     },
   });
 
@@ -215,7 +252,7 @@ function App() {
           driverLayer={locationLayer}
         />
         <DriverPositionReplayer />
-        <div style={{ pointerEvents: "all" }}>
+        <div style={{ pointerEvents: "all" }} hidden>
           <input
             type="range"
             min={0}
@@ -245,7 +282,7 @@ function App() {
           <input
             type="range"
             min={0}
-            max={30}
+            max={50}
             value={scaleR}
             onChange={(e) => {
               setR(Number(e.target.value));

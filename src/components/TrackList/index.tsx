@@ -76,15 +76,15 @@ export const TrackList = () => {
                   }`}
                   onClick={() => {
                     console.log(
-                      `selected: ${meeting.meeting_name}`
+                      `selected: ${meeting.meeting_name}/${meeting.circuit_short_name}`
                     );
                     publisher("onTrackSelect", {
                       trackIndex: index,
-                      trackName: meeting.location,
+                      trackName: meeting.circuit_short_name,
                     });
                     publisher("LoadTrack", {
                       trackIndex: index,
-                      trackName: meeting.location,
+                      trackName: meeting.circuit_short_name,
                     });
                     setSelectedMeeting(meeting.meeting_key);
                     setSessionList([]);
