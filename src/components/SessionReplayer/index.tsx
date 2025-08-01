@@ -299,6 +299,10 @@ export const DriverLocationReplayer = ({
 
     const frame = lastLocationEvent;
     const resolution = 0.128;
+    const translateX = 30;
+    const resolutionX = resolution;
+    const translateY = 220;
+    const resolutionY = resolution;
     if (!frame) return;
 
     // get source
@@ -312,8 +316,8 @@ export const DriverLocationReplayer = ({
       const coord = fromLonLat(origin, PROJECTION);
       const point = new Circle(coord, 20);
       point.translate(
-        data.x * resolution + 30,
-        data.y * resolution + 170
+        data.x * resolutionX + translateX,
+        data.y * resolutionY + translateY
       );
 
       const driverName =

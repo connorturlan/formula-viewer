@@ -167,14 +167,14 @@ export function WorldMap({}) {
     selectTrack(e);
   });
 
-  UseSub("toggle3DGlobe", (e: any) => {
-    setGlobe(e.visible);
-    moveCameraTo(
-      e.lng,
-      e.lat,
-      MIN_ALTITUDE + 0.01 //e.altitude
-    );
-  });
+  // UseSub("toggle3DGlobe", (e: any) => {
+  //   setGlobe(e.visible);
+  //   moveCameraTo(
+  //     e.lng,
+  //     e.lat,
+  //     MIN_ALTITUDE + 0.01 //e.altitude
+  //   );
+  // });
 
   const DARK = true;
 

@@ -1,120 +1,121 @@
-{
-  "tracks": [
-    {
-      "name": "Adelaide",
-      "gpName": "Pre-Season Testing Pls",
-      "lng": 138.599503,
-      "lat": -34.92123,
-      "model": "models/albert_park.stl",
-      "image": ""
-    },
-    {
-      "name": "Melbourne",
-      "gpName": "Australian Grand Prix",
-      "lng": 144.97,
-      "lat": -37.8503,
-      "model": "models/sectors/melbourne.stl",
-      "image": "svg/australia.svg",
-      "translateX": 0,
-      "translateY": 0,
-      "scaleX": 0,
-      "scaleY": 0
-    },
-    {
-      "name": "Shanghai",
-      "gpName": "Chinese Grand Prix",
-      "lng": 121.1311,
-      "lat": 31.202,
-      "model": "models/shanghai-international-circuit-shanghai-china-5xs.stl",
-      "image": "svg/china.svg"
-    },
-    {
-      "name": "Suzuka",
-      "gpName": "Japanese Grand Prix",
-      "lng": 136.5417,
-      "lat": 34.8425,
-      "model": "models/suzuka-circuit-suzuka-japan-5xsup.stl",
-      "image": "svg/japan.svg"
-    },
-    {
-      "name": "Sakhir",
-      "gpName": "Bahrain Grand Prix",
-      "lng": 50.3038,
-      "lat": 26.157,
-      "model": "models/bahrain-international-circuit-sakhir-bahrain-5xsu.stl",
-      "image": "svg/hungary.svg"
-    },
-    {
-      "name": "Jeddah",
-      "gpName": "Saudi Arabian Grand Prix",
-      "lng": 39.0616,
-      "lat": 21.3755,
-      "model": "",
-      "image": "svg/saudi_arabia.svg"
-    },
-    {
-      "name": "Miami",
-      "gpName": "Miami Grand Prix",
-      "lng": -80.238889,
-      "lat": 25.958056,
-      "model": "",
-      "image": "svg/miami.svg"
-    },
-    {
-      "name": "Imola",
-      "gpName": "Emilia Romagna Grand Prix",
-      "lng": 11.4248,
-      "lat": 44.2028,
-      "model": "",
-      "image": "svg/imola.svg"
-    },
-    {
-      "name": "Monte Carlo",
-      "gpName": "Monaco Grand Prix",
-      "lng": 7.4217,
-      "lat": 43.7342,
-      "model": "",
-      "image": "svg/monaco.svg"
-    },
-    {
-      "name": "Catalunya",
-      "gpName": "Spanish Grand Prix",
-      "lng": -2.2579,
-      "lat": 41.5697,
-      "model": "models/circuit-de-barcelona-catalunya-montmelo-spain-5xs.stl",
-      "image": "svg/spain.svg"
-    },
-    {
-      "name": "Montreal",
-      "gpName": "Canadian Grand Prix",
-      "lng": -73.5226,
-      "lat": 45.5014,
-      "model": "models/circuit-gilles-villeneuve-montreal-canada-5xsup.stl",
-      "image": "svg/canada.svg"
-    },
-    {
-      "name": "Spielberg",
-      "gpName": "Austrian Grand Prix",
-      "lng": 14.7651,
-      "lat": 47.2197,
-      "model": "models/red-bull-ring-spielberg-bei-knittelfeld-austria-5.stl",
-      "image": "svg/austria.svg"
-    },
-    {
-      "name": "Silverstone",
-      "gpName": "British Grand Prix",
-      "lng": -1.02303,
-      "lat": 52.0681,
-      "model": "models/silverstone-circuit-silverstone-united-kingdom-5x.stl",
-      "image": "svg/silverstone.svg"
-    },
-    {
-      "name": "Spa-Francorchamps",
-      "gpName": "Belgian Grand Prix",
-      "lng": 5.971003,
-      "lat": 50.4457,
-      "model": "models/hungaroring-mogyorod-hungary-5xsup.stl",
-      "image": "svg/spa.svg"
-    }
-  ]
-}
+[
+  {
+    "name": "Adelaide",
+    "gpName": "Pre-Season Testing Pls",
+    "lng": 138.599503,
+    "lat": -34.92123,
+    "model": "models/albert_park.stl",
+    "image": ""
+  },
+  {
+    "name": "Melbourne",
+    "gpName": "Australian Grand Prix",
+    "lng": 144.97,
+    "lat": -37.8503,
+    "model": "models/sectors/melbourne.stl",
+    "image": "svg/australia.svg",
+    "width": 96,
+    "height": 152,
+    "resolution": 23.8,
+    "translateX": 30,
+    "translateY": 220,
+    "scaleX": 0.128,
+    "scaleY": 0.128
+  },
+  {
+    "name": "Shanghai",
+    "gpName": "Chinese Grand Prix",
+    "lng": 121.1311,
+    "lat": 31.202,
+    "model": "models/shanghai-international-circuit-shanghai-china-5xs.stl",
+    "image": "svg/china.svg"
+  },
+  {
+    "name": "Suzuka",
+    "gpName": "Japanese Grand Prix",
+    "lng": 136.5417,
+    "lat": 34.8425,
+    "model": "models/suzuka-circuit-suzuka-japan-5xsup.stl",
+    "image": "svg/japan.svg"
+  },
+  {
+    "name": "Sakhir",
+    "gpName": "Bahrain Grand Prix",
+    "lng": 50.3038,
+    "lat": 26.157,
+    "model": "models/bahrain-international-circuit-sakhir-bahrain-5xsu.stl",
+    "image": "svg/hungary.svg"
+  },
+  {
+    "name": "Jeddah",
+    "gpName": "Saudi Arabian Grand Prix",
+    "lng": 39.0616,
+    "lat": 21.3755,
+    "model": "",
+    "image": "svg/saudi_arabia.svg"
+  },
+  {
+    "name": "Miami",
+    "gpName": "Miami Grand Prix",
+    "lng": -80.238889,
+    "lat": 25.958056,
+    "model": "",
+    "image": "svg/miami.svg"
+  },
+  {
+    "name": "Imola",
+    "gpName": "Emilia Romagna Grand Prix",
+    "lng": 11.4248,
+    "lat": 44.2028,
+    "model": "",
+    "image": "svg/imola.svg"
+  },
+  {
+    "name": "Monte Carlo",
+    "gpName": "Monaco Grand Prix",
+    "lng": 7.4217,
+    "lat": 43.7342,
+    "model": "",
+    "image": "svg/monaco.svg"
+  },
+  {
+    "name": "Catalunya",
+    "gpName": "Spanish Grand Prix",
+    "lng": -2.2579,
+    "lat": 41.5697,
+    "model": "models/circuit-de-barcelona-catalunya-montmelo-spain-5xs.stl",
+    "image": "svg/spain.svg"
+  },
+  {
+    "name": "Montreal",
+    "gpName": "Canadian Grand Prix",
+    "lng": -73.5226,
+    "lat": 45.5014,
+    "model": "models/circuit-gilles-villeneuve-montreal-canada-5xsup.stl",
+    "image": "svg/canada.svg"
+  },
+  {
+    "name": "Spielberg",
+    "gpName": "Austrian Grand Prix",
+    "lng": 14.7651,
+    "lat": 47.2197,
+    "model": "models/red-bull-ring-spielberg-bei-knittelfeld-austria-5.stl",
+    "image": "svg/austria.svg"
+  },
+  {
+    "name": "Silverstone",
+    "gpName": "British Grand Prix",
+    "lng": -1.02303,
+    "lat": 52.0681,
+    "model": "models/silverstone-circuit-silverstone-united-kingdom-5x.stl",
+    "image": "svg/silverstone.svg"
+  },
+  {
+    "name": "Spa-Francorchamps",
+    "gpName": "Belgian Grand Prix",
+    "lng": 5.971003,
+    "lat": 50.4457,
+    "model": "models/hungaroring-mogyorod-hungary-5xsup.stl",
+    "image": "svg/spa.svg"
+  }
+]

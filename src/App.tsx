@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { WorldMap } from "./components/WorldMap";
 import { TrackList } from "./components/TrackList";
 import { MapContainer } from "./components/MapContainer/MapContainer";
@@ -12,6 +12,7 @@ import { Point } from "ol/geom";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
 import trackArray from "./components/WorldMap/tracks-array.json";
+import trackData from "./components/WorldMap/track-data.json";
 import { fromLonLat } from "ol/proj";
 import { PROJECTION } from "./utils/defaults";
 import Icon from "ol/style/Icon";
@@ -23,6 +24,9 @@ import {
 } from "./components/SessionReplayer";
 import Text from "ol/style/Text";
 import styles from "./App.module.scss";
+import Layer from "ol/layer/Layer";
+import { createRoot } from "react-dom/client";
+import { composeCssTransform } from "ol/transform";
 
 const melbourne = [144.97, -37.8503];
 // const spa = [5.971003, 50.4457];
@@ -53,12 +57,67 @@ function App() {
 
   UseSub("LoadTrack", (event: any) => {
     const { trackName } = event;
-    const track = trackArray.tracks.find(
+    const track = trackData.find(
       (item) => item.name === trackName
     );
     if (!track) return;
 
     setMapOrigin([track.lng, track.lat]);
+    setX(track.width!);
+    setY(track.height!);
+    setR(track.resolution!);
+  });
+
+  const [scaleX, setX] = useState(96);
+  const [scaleY, setY] = useState(152);
+  const [scaleR, setR] = useState(23.8);
+
+  useEffect(() => {
+    console.log(scaleX, scaleY, scaleR);
+    width = scaleX;
+    height = scaleY;
+    svgResolution = scaleR;
+  }, [scaleX, scaleY, scaleR]);
+
+  // const trackSource = new VectorSource();
+  const svgContainer = document.createElement("div");
+  const svgRoot = createRoot(svgContainer).render(
+    <>
+      <img src="svg/australia.svg" />
+    </>
+  );
+  let width = scaleX;
+  let height = scaleY;
+  let svgResolution = scaleR;
+  svgContainer.style.width = width + "px";
+  svgContainer.style.height = height + "px";
+  svgContainer.style.transformOrigin = "top left";
+  svgContainer.className = "svg-layer";
+  svgContainer.style.position = "absolute";
+  svgContainer.style.userSelect = "none";
+
+  const svgLayerRef = useRef<Layer>(new Layer({}));
+  svgLayerRef.current = new Layer({
+    // const svgLayer = new Layer({
+    render: (frameState) => {
+      const scale =
+        svgResolution / frameState.viewState.resolution;
+      const center = frameState.viewState.center;
+      const size = frameState.size;
+      const coord = fromLonLat(melbourne);
+      const cssTransform = composeCssTransform(
+        size[0] / 2,
+        size[1] / 2,
+        scale,
+        scale,
+        frameState.viewState.rotation,
+        -(center[0] - coord[0]) / svgResolution - width / 2,
+        (center[1] - coord[1]) / svgResolution - height / 2
+      );
+      svgContainer.style.transform = cssTransform;
+      // svgContainer.style.opacity = String(0.5);
+      return svgContainer;
+    },
   });
 
   const trackSource = new VectorSource();
@@ -98,18 +157,18 @@ function App() {
 
   const locationSource = new VectorSource();
   const locationLayer = new VectorLayer({
-    style: (_feature) => {
+    style: (feature) => {
       return new Style({
         zIndex:
-          _feature.get("driver_position") ||
-          _feature.get("driver") ||
+          feature.get("driver_position") ||
+          feature.get("driver") ||
           0,
         fill: new Fill({
           color: "#FFFFFF",
         }),
         stroke: new Stroke({
           color: `#${
-            _feature.get("driver_colour") || "333"
+            feature.get("driver_colour") || "333"
           }`,
           width: 6,
           miterLimit: 2,
@@ -123,7 +182,7 @@ function App() {
             color: "#222",
           }),
           padding: [2, 4, 2, 4],
-          text: `${_feature.get("driver")}\n${_feature.get(
+          text: `${feature.get("driver")}\n${feature.get(
             "driver_name"
           )}`,
           stroke: new Stroke({
@@ -140,14 +199,14 @@ function App() {
   return (
     <>
       <MapContainer
-        layers={[trackLayer, locationLayer]}
+        layers={[svgLayerRef.current, locationLayer]}
         mapCenter={mapOrigin}
         onClick={undefined}
         onInit={undefined}
         onMove={onMapMove}
         duringMove={onMapMove}
       />
-      <WorldMap />
+      {/* <WorldMap /> */}
       <div className={styles.Container}>
         <ToastMessage />
         <TrackList />
@@ -157,6 +216,49 @@ function App() {
           driverLayer={locationLayer}
         />
         <DriverPositionReplayer />
+        <div style={{ pointerEvents: "all" }}>
+          <input
+            type="range"
+            min={0}
+            max={200}
+            value={scaleX}
+            onChange={(e) => {
+              setX(Number(e.target.value));
+            }}
+            onWheel={(e) => {
+              e.stopPropagation();
+              setX(scaleX + Math.sign(Number(e.deltaY)));
+            }}
+          ></input>
+          <input
+            type="range"
+            min={0}
+            max={200}
+            value={scaleY}
+            onChange={(e) => {
+              setY(Number(e.target.value));
+            }}
+            onWheel={(e) => {
+              e.stopPropagation();
+              setY(scaleY + Math.sign(Number(e.deltaY)));
+            }}
+          ></input>
+          <input
+            type="range"
+            min={0}
+            max={30}
+            value={scaleR}
+            onChange={(e) => {
+              setR(Number(e.target.value));
+            }}
+            onWheel={(e) => {
+              e.stopPropagation();
+              setR(
+                scaleR + Math.sign(Number(e.deltaY)) / 10
+              );
+            }}
+          ></input>
+        </div>
       </div>
     </>
   );
